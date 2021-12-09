@@ -26,6 +26,7 @@
 		539BF837276282D5005E2EFF /* EngineeringProbeRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineeringProbeRow.swift; sourceTree = "<group>"; };
 		539BF83B276282EC005E2EFF /* EngineeringApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineeringApp.swift; sourceTree = "<group>"; };
 		539BF8412762AD5D005E2EFF /* CSV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CSV.swift; sourceTree = "<group>"; };
+		539BF8432762B226005E2EFF /* Combustion-iOS-Example-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Combustion-iOS-Example-Info.plist"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +60,7 @@
 		539BF8252762819F005E2EFF /* Combustion iOS Example */ = {
 			isa = PBXGroup;
 			children = (
+				539BF8432762B226005E2EFF /* Combustion-iOS-Example-Info.plist */,
 				539BF8402762AD55005E2EFF /* Utilities */,
 				539BF834276282C4005E2EFF /* EngineeringScreens */,
 				539BF83B276282EC005E2EFF /* EngineeringApp.swift */,
@@ -309,6 +311,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Combustion iOS Example/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Combustion-iOS-Example-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -340,6 +343,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Combustion iOS Example/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Combustion-iOS-Example-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

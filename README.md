@@ -1,2 +1,3 @@
-# combustion-ios-example
-Example of how to use combustion-ios-ble framework.
+# Combustion iOS BLE Example
+## Overview
+An example project illustrating how to use the [Combustion iOS BLE](https://github.com/combustion-inc/combustion-ios-ble) framework to communicate with Combustion Inc. probes.
