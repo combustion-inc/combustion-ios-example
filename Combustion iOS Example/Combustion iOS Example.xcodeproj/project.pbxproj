@@ -1,0 +1,405 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		539BF82B276281A0005E2EFF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 539BF82A276281A0005E2EFF /* Assets.xcassets */; };
+		539BF82E276281A0005E2EFF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 539BF82D276281A0005E2EFF /* Preview Assets.xcassets */; };
+		539BF838276282D5005E2EFF /* EngineeringProbeDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539BF835276282D5005E2EFF /* EngineeringProbeDetails.swift */; };
+		539BF839276282D5005E2EFF /* EngineeringProbeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539BF836276282D5005E2EFF /* EngineeringProbeList.swift */; };
+		539BF83A276282D5005E2EFF /* EngineeringProbeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539BF837276282D5005E2EFF /* EngineeringProbeRow.swift */; };
+		539BF83C276282EC005E2EFF /* EngineeringApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539BF83B276282EC005E2EFF /* EngineeringApp.swift */; };
+		539BF83F27628329005E2EFF /* CombustionBLE in Frameworks */ = {isa = PBXBuildFile; productRef = 539BF83E27628329005E2EFF /* CombustionBLE */; };
+		539BF8422762AD5D005E2EFF /* CSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539BF8412762AD5D005E2EFF /* CSV.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		539BF8232762819F005E2EFF /* Combustion iOS Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Combustion iOS Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		539BF82A276281A0005E2EFF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		539BF82D276281A0005E2EFF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		539BF835276282D5005E2EFF /* EngineeringProbeDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineeringProbeDetails.swift; sourceTree = "<group>"; };
+		539BF836276282D5005E2EFF /* EngineeringProbeList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineeringProbeList.swift; sourceTree = "<group>"; };
+		539BF837276282D5005E2EFF /* EngineeringProbeRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineeringProbeRow.swift; sourceTree = "<group>"; };
+		539BF83B276282EC005E2EFF /* EngineeringApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineeringApp.swift; sourceTree = "<group>"; };
+		539BF8412762AD5D005E2EFF /* CSV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CSV.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		539BF8202762819F005E2EFF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				539BF83F27628329005E2EFF /* CombustionBLE in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		539BF81A2762819F005E2EFF = {
+			isa = PBXGroup;
+			children = (
+				539BF8252762819F005E2EFF /* Combustion iOS Example */,
+				539BF8242762819F005E2EFF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		539BF8242762819F005E2EFF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				539BF8232762819F005E2EFF /* Combustion iOS Example.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		539BF8252762819F005E2EFF /* Combustion iOS Example */ = {
+			isa = PBXGroup;
+			children = (
+				539BF8402762AD55005E2EFF /* Utilities */,
+				539BF834276282C4005E2EFF /* EngineeringScreens */,
+				539BF83B276282EC005E2EFF /* EngineeringApp.swift */,
+				539BF82A276281A0005E2EFF /* Assets.xcassets */,
+				539BF82C276281A0005E2EFF /* Preview Content */,
+			);
+			path = "Combustion iOS Example";
+			sourceTree = "<group>";
+		};
+		539BF82C276281A0005E2EFF /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				539BF82D276281A0005E2EFF /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		539BF834276282C4005E2EFF /* EngineeringScreens */ = {
+			isa = PBXGroup;
+			children = (
+				539BF835276282D5005E2EFF /* EngineeringProbeDetails.swift */,
+				539BF836276282D5005E2EFF /* EngineeringProbeList.swift */,
+				539BF837276282D5005E2EFF /* EngineeringProbeRow.swift */,
+			);
+			path = EngineeringScreens;
+			sourceTree = "<group>";
+		};
+		539BF8402762AD55005E2EFF /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				539BF8412762AD5D005E2EFF /* CSV.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		539BF8222762819F005E2EFF /* Combustion iOS Example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 539BF831276281A0005E2EFF /* Build configuration list for PBXNativeTarget "Combustion iOS Example" */;
+			buildPhases = (
+				539BF81F2762819F005E2EFF /* Sources */,
+				539BF8202762819F005E2EFF /* Frameworks */,
+				539BF8212762819F005E2EFF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Combustion iOS Example";
+			packageProductDependencies = (
+				539BF83E27628329005E2EFF /* CombustionBLE */,
+			);
+			productName = "Combustion iOS Example";
+			productReference = 539BF8232762819F005E2EFF /* Combustion iOS Example.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		539BF81B2762819F005E2EFF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1310;
+				LastUpgradeCheck = 1310;
+				TargetAttributes = {
+					539BF8222762819F005E2EFF = {
+						CreatedOnToolsVersion = 13.1;
+						LastSwiftMigration = 1310;
+					};
+				};
+			};
+			buildConfigurationList = 539BF81E2762819F005E2EFF /* Build configuration list for PBXProject "Combustion iOS Example" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 539BF81A2762819F005E2EFF;
+			packageReferences = (
+				539BF83D27628329005E2EFF /* XCRemoteSwiftPackageReference "combustion-ios-ble" */,
+			);
+			productRefGroup = 539BF8242762819F005E2EFF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				539BF8222762819F005E2EFF /* Combustion iOS Example */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		539BF8212762819F005E2EFF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				539BF82E276281A0005E2EFF /* Preview Assets.xcassets in Resources */,
+				539BF82B276281A0005E2EFF /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		539BF81F2762819F005E2EFF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				539BF83A276282D5005E2EFF /* EngineeringProbeRow.swift in Sources */,
+				539BF839276282D5005E2EFF /* EngineeringProbeList.swift in Sources */,
+				539BF8422762AD5D005E2EFF /* CSV.swift in Sources */,
+				539BF838276282D5005E2EFF /* EngineeringProbeDetails.swift in Sources */,
+				539BF83C276282EC005E2EFF /* EngineeringApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		539BF82F276281A0005E2EFF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		539BF830276281A0005E2EFF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		539BF832276281A0005E2EFF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Combustion iOS Example/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.Combustion-iOS-Example";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		539BF833276281A0005E2EFF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Combustion iOS Example/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.Combustion-iOS-Example";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		539BF81E2762819F005E2EFF /* Build configuration list for PBXProject "Combustion iOS Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				539BF82F276281A0005E2EFF /* Debug */,
+				539BF830276281A0005E2EFF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		539BF831276281A0005E2EFF /* Build configuration list for PBXNativeTarget "Combustion iOS Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				539BF832276281A0005E2EFF /* Debug */,
+				539BF833276281A0005E2EFF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		539BF83D27628329005E2EFF /* XCRemoteSwiftPackageReference "combustion-ios-ble" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/combustion-inc/combustion-ios-ble";
+			requirement = {
+				branch = "feature/initial-setup";
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		539BF83E27628329005E2EFF /* CombustionBLE */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 539BF83D27628329005E2EFF /* XCRemoteSwiftPackageReference "combustion-ios-ble" */;
+			productName = CombustionBLE;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 539BF81B2762819F005E2EFF /* Project object */;
+}
