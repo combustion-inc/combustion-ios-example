@@ -79,7 +79,7 @@ struct EngineeringProbeDetails: View {
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
                                         .frame(width: 36, height: 36)
-                }
+                }.disabled(!device.logsUpToDate)
             
             }
             
