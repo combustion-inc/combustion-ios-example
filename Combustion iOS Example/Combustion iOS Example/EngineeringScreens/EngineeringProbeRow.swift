@@ -33,12 +33,12 @@ struct EngineeringProbeRow: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            if let device = deviceManager.devices[deviceKey] {
-                Text("Serial = \(device.name)")
-                Text("MAC = \(device.macAddressString)")
-                Text("RSSI   = \(device.rssi)")
+            if let probe = deviceManager.probes[deviceKey] {
+                Text("Serial = \(probe.name)")
+                Text("MAC = \(probe.macAddressString)")
+                Text("RSSI   = \(probe.rssi)")
                 
-                if let temps = device.currentTemperatures {
+                if let temps = probe.currentTemperatures {
                     let tempStrings = temps.values.map { String(format: "%.02f", $0) }
                     Text("\(tempStrings[0]), \(tempStrings[1]), \(tempStrings[2]), \(tempStrings[3])")
                     Text("\(tempStrings[4]), \(tempStrings[5]), \(tempStrings[6]), \(tempStrings[7])")

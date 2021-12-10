@@ -11,7 +11,7 @@ import CombustionBLE
 struct CSV {
     
     /// Helper function that generates a CSV representation of probe data.
-    static func probeDataToCsv(device: Device, date: Date = Date()) -> String {
+    static func probeDataToCsv(probe: Probe, date: Date = Date()) -> String {
         var output = [String]()
         
         let dateFormatter = DateFormatter()
@@ -19,7 +19,7 @@ struct CSV {
         let dateString = dateFormatter.string(from: date)
         
         output.append("Combustion Inc. Probe Data")
-        output.append("Probe S/N: \(String(format: "%4X", device.serialNumber))")
+        output.append("Probe S/N: \(String(format: "%4X", probe.serialNumber))")
         output.append("\(dateString)")
         output.append("")
         
@@ -29,7 +29,7 @@ struct CSV {
         output.append("SequenceNumber,T1,T2,T3,T4,T5,T6,T7,T8")
         
         // Add temperature data points
-        for dp in device.temperatureLog.dataPoints {
+        for dp in probe.temperatureLog.dataPoints {
             output.append(String(format: "%d,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f",
                                  dp.sequenceNum,
                                  dp.temperatures.values[0], dp.temperatures.values[1],
@@ -43,18 +43,18 @@ struct CSV {
     }
     
     /// Creates a CSV file for export.
-    /// - param device: Device for which to create the file
+    /// - param probe: Probe for which to create the file
     /// - returns: URL of file
-    static func createCsvFile(device: Device) -> URL? {
+    static func createCsvFile(probe: Probe) -> URL? {
         let date = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH_mm_ss"
         let dateString = dateFormatter.string(from: date)
         
-        let filename = "Probe Data - \(String(format: "%4X", device.serialNumber)) - \(dateString).csv"
+        let filename = "Probe Data - \(String(format: "%4X", probe.serialNumber)) - \(dateString).csv"
         
         // Generate the CSV
-        let csv = probeDataToCsv(device: device, date: date)
+        let csv = probeDataToCsv(probe: probe, date: date)
         
         // Create the temporary file
         let filePath = NSTemporaryDirectory() + "/" + filename;

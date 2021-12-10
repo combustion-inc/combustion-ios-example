@@ -33,23 +33,23 @@ struct EngineeringProbeDetails: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            if let device = deviceManager.devices[deviceKey] {
+            if let probe = deviceManager.probes[deviceKey] {
                 Group {
-                    Text("Serial = \(device.name)")
-                    Text("MAC = \(device.macAddressString)")
-                    Text("RSSI   = \(device.rssi)")
-                    let connected = device.connectionState == .connected
+                    Text("Serial = \(probe.name)")
+                    Text("MAC = \(probe.macAddressString)")
+                    Text("RSSI   = \(probe.rssi)")
+                    let connected = probe.connectionState == .connected
                     Text("Connected = \(connected.description)")
-                    if let status = device.status {
+                    if let status = probe.status {
                         Text("Records = \(status.minSequenceNumber) : \(status.maxSequenceNumber)")
                     }
                     else {
                         Text("Records = ?? : ??")
                     }
                     
-                    Text("Logged records: \(device.temperatureLog.dataPoints.count)")
+                    Text("Logged records: \(probe.temperatureLog.dataPoints.count)")
 
-                    if let temps = device.currentTemperatures {
+                    if let temps = probe.currentTemperatures {
                         let tempStrings = temps.values.map { String(format: "%.02f", $0) }
                         Text("\(tempStrings[0]), \(tempStrings[1]), \(tempStrings[2]), \(tempStrings[3])")
                         Text("\(tempStrings[4]), \(tempStrings[5]), \(tempStrings[6]), \(tempStrings[7])")
@@ -59,7 +59,7 @@ struct EngineeringProbeDetails: View {
                 Spacer()
                 
                 Button(action: {
-                    if var dev = deviceManager.devices[deviceKey] {
+                    if let dev = deviceManager.probes[deviceKey] {
                         if dev.connectionState == .connected {
                             dev.disconnect()
                         }
@@ -68,7 +68,7 @@ struct EngineeringProbeDetails: View {
                         }
                     }
                 }){
-                    let title = device.connectionState == .connected ? "Disconnect" : "Connect"
+                    let title = probe.connectionState == .connected ? "Disconnect" : "Connect"
                     Text(title).font(.title)
                 }
                      
@@ -79,23 +79,23 @@ struct EngineeringProbeDetails: View {
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
                                         .frame(width: 36, height: 36)
-                }.disabled(!device.logsUpToDate)
+                }.disabled(!probe.logsUpToDate)
             
             }
             
             Spacer(minLength: 400)
         }
         .onDisappear {
-            if var dev = deviceManager.devices[deviceKey], dev.connectionState == .connected {
+            if let dev = deviceManager.probes[deviceKey], dev.connectionState == .connected {
                 dev.disconnect()
             }
         }
     }
     
     func shareRecords() {
-        guard let device = deviceManager.devices[deviceKey] else { return }
+        guard let probe = deviceManager.probes[deviceKey] else { return }
         // Generate the CSV file
-        guard let csvUrl = CSV.createCsvFile(device: device) else { return }
+        guard let csvUrl = CSV.createCsvFile(probe: probe) else { return }
         let activityVC = UIActivityViewController(activityItems: [csvUrl], applicationActivities: nil)
         UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
         // TODO clean up temp file on completion

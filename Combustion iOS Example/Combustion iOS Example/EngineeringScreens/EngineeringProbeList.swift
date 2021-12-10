@@ -33,7 +33,7 @@ struct EngineeringProbeList: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(deviceManager.devices.keys.sorted(), id: \.self) { key in
+                ForEach(deviceManager.probes.keys.sorted(), id: \.self) { key in
                     NavigationLink(destination: EngineeringProbeDetails(deviceKey: key)) {
                         EngineeringProbeRow(deviceKey: key)
                     }
