@@ -13,8 +13,8 @@
 		539BF839276282D5005E2EFF /* EngineeringProbeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539BF836276282D5005E2EFF /* EngineeringProbeList.swift */; };
 		539BF83A276282D5005E2EFF /* EngineeringProbeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539BF837276282D5005E2EFF /* EngineeringProbeRow.swift */; };
 		539BF83C276282EC005E2EFF /* EngineeringApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539BF83B276282EC005E2EFF /* EngineeringApp.swift */; };
-		539BF83F27628329005E2EFF /* CombustionBLE in Frameworks */ = {isa = PBXBuildFile; productRef = 539BF83E27628329005E2EFF /* CombustionBLE */; };
 		539BF8422762AD5D005E2EFF /* CSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539BF8412762AD5D005E2EFF /* CSV.swift */; };
+		539BF8482763D0E0005E2EFF /* CombustionBLE in Frameworks */ = {isa = PBXBuildFile; productRef = 539BF8472763D0E0005E2EFF /* CombustionBLE */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,7 +34,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				539BF83F27628329005E2EFF /* CombustionBLE in Frameworks */,
+				539BF8482763D0E0005E2EFF /* CombustionBLE in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -113,7 +113,7 @@
 			);
 			name = "Combustion iOS Example";
 			packageProductDependencies = (
-				539BF83E27628329005E2EFF /* CombustionBLE */,
+				539BF8472763D0E0005E2EFF /* CombustionBLE */,
 			);
 			productName = "Combustion iOS Example";
 			productReference = 539BF8232762819F005E2EFF /* Combustion iOS Example.app */;
@@ -145,7 +145,7 @@
 			);
 			mainGroup = 539BF81A2762819F005E2EFF;
 			packageReferences = (
-				539BF83D27628329005E2EFF /* XCRemoteSwiftPackageReference "combustion-ios-ble" */,
+				539BF8462763D0E0005E2EFF /* XCRemoteSwiftPackageReference "combustion-ios-ble" */,
 			);
 			productRefGroup = 539BF8242762819F005E2EFF /* Products */;
 			projectDirPath = "";
@@ -387,20 +387,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		539BF83D27628329005E2EFF /* XCRemoteSwiftPackageReference "combustion-ios-ble" */ = {
+		539BF8462763D0E0005E2EFF /* XCRemoteSwiftPackageReference "combustion-ios-ble" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/combustion-inc/combustion-ios-ble";
 			requirement = {
-				branch = "feature/initial-setup";
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.7.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		539BF83E27628329005E2EFF /* CombustionBLE */ = {
+		539BF8472763D0E0005E2EFF /* CombustionBLE */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 539BF83D27628329005E2EFF /* XCRemoteSwiftPackageReference "combustion-ios-ble" */;
+			package = 539BF8462763D0E0005E2EFF /* XCRemoteSwiftPackageReference "combustion-ios-ble" */;
 			productName = CombustionBLE;
 		};
 /* End XCSwiftPackageProductDependency section */
