@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "combustion-ios-ble",
+        "repositoryURL": "https://github.com/combustion-inc/combustion-ios-ble",
+        "state": {
+          "branch": "feature/initial-setup",
+          "revision": "0a069011e1dcd33f12d02c14894940a543c77fcb",
+          "version": null
+        }
+      },
+      {
+        "package": "swift-collections",
+        "repositoryURL": "https://github.com/apple/swift-collections",
+        "state": {
+          "branch": null,
+          "revision": "48254824bb4248676bf7ce56014ff57b142b77eb",
+          "version": "1.0.2"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
