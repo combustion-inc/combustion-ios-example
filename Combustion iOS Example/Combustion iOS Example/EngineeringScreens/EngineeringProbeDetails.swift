@@ -28,72 +28,66 @@ import SwiftUI
 import CombustionBLE
 
 struct EngineeringProbeDetails: View {
-    @ObservedObject var deviceManager = DeviceManager.shared
-    let deviceKey: String
+    @ObservedObject var probe: Probe
 
     var body: some View {
         VStack(alignment: .leading) {
-            if let probe = deviceManager.probes[deviceKey] {
-                Group {
-                    Text("Serial = \(probe.name)")
-                    Text("MAC = \(probe.macAddressString)")
-                    Text("RSSI   = \(probe.rssi)")
-                    let connected = probe.connectionState == .connected
-                    Text("Connected = \(connected.description)")
-                    if let status = probe.status {
-                        Text("Records = \(status.minSequenceNumber) : \(status.maxSequenceNumber)")
-                    }
-                    else {
-                        Text("Records = ?? : ??")
-                    }
-                    
-                    Text("Logged records: \(probe.temperatureLog.dataPoints.count)")
+            Group {
+                Text("Serial = \(probe.name)")
+                Text("MAC = \(probe.macAddressString)")
+                Text("RSSI   = \(probe.rssi)")
+                let connected = probe.connectionState == .connected
+                Text("Connected = \(connected.description)")
+                if let status = probe.status {
+                    Text("Records = \(status.minSequenceNumber) : \(status.maxSequenceNumber)")
+                }
+                else {
+                    Text("Records = ?? : ??")
+                }
+                
+                Text("Logged records: \(probe.temperatureLog.dataPoints.count)")
 
-                    if let temps = probe.currentTemperatures {
-                        let tempStrings = temps.values.map { String(format: "%.02f", $0) }
-                        Text("\(tempStrings[0]), \(tempStrings[1]), \(tempStrings[2]), \(tempStrings[3])")
-                        Text("\(tempStrings[4]), \(tempStrings[5]), \(tempStrings[6]), \(tempStrings[7])")
-                    }
+                if let temps = probe.currentTemperatures {
+                    let tempStrings = temps.values.map { String(format: "%.02f", $0) }
+                    Text("\(tempStrings[0]), \(tempStrings[1]), \(tempStrings[2]), \(tempStrings[3])")
+                    Text("\(tempStrings[4]), \(tempStrings[5]), \(tempStrings[6]), \(tempStrings[7])")
                 }
-           
-                Spacer()
-                
-                Button(action: {
-                    if let dev = deviceManager.probes[deviceKey] {
-                        if dev.connectionState == .connected {
-                            dev.disconnect()
-                        }
-                        else {
-                            dev.connect()
-                        }
-                    }
-                }){
-                    let title = probe.connectionState == .connected ? "Disconnect" : "Connect"
-                    Text(title).font(.title)
-                }
-                     
-                Spacer()
-                
-                Button(action: shareRecords) {
-                    Image(systemName: "square.and.arrow.up")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: 36, height: 36)
-                }.disabled(!probe.logsUpToDate)
-            
             }
+       
+            Spacer()
             
+            Button(action: {
+                if probe.connectionState == .connected {
+                    probe.disconnect()
+                }
+                else {
+                    probe.connect()
+                }
+            }){
+                let title = probe.connectionState == .connected ? "Disconnect" : "Connect"
+                Text(title).font(.title)
+            }
+                 
+            Spacer()
+            
+            Button(action: shareRecords) {
+                Image(systemName: "square.and.arrow.up")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 36, height: 36)
+            }.disabled(!probe.logsUpToDate)
+        
+        
             Spacer(minLength: 400)
         }
         .onDisappear {
-            if let dev = deviceManager.probes[deviceKey], dev.connectionState == .connected {
-                dev.disconnect()
+            if probe.connectionState == .connected {
+                probe.disconnect()
             }
         }
     }
     
     func shareRecords() {
-        guard let probe = deviceManager.probes[deviceKey] else { return }
         // Generate the CSV file
         guard let csvUrl = CSV.createCsvFile(probe: probe) else { return }
         let activityVC = UIActivityViewController(activityItems: [csvUrl], applicationActivities: nil)
