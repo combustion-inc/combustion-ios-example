@@ -1,4 +1,4 @@
-# Combustion iOS Example App
+# Combustion Inc. iOS Example App
 ## Overview
 An example project illustrating how to use the [Combustion iOS BLE](https://github.com/combustion-inc/combustion-ios-ble) framework to communicate with Combustion Inc. Predictive Thermometers.
 
