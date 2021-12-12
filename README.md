@@ -4,6 +4,8 @@ An example project illustrating how to use the [Combustion iOS BLE](https://gith
 
 This simple example illustrates showing a list of all discovered thermometers, viewing detailed information about an individual thermometer, and connecting to and retrieving logged temperatures from that thermometer. It also illustrates CSV export of that retrieved logged data.
 
+For bug reports, feature requests, or discussion about the Combustion Inc. open source project, please go to the [primary repo](https://github.com/combustion-inc/combustion-ios-ble/) for Combustion Inc. 
+
 ## About Combustion Inc.
 
 We build nice things that make cooking more enjoyable. Like a thermometer that's wireless, oven-safe, and uses machine learning to do what no other thermometer can: predict your food’s cooking and resting times with uncanny accuracy. 
