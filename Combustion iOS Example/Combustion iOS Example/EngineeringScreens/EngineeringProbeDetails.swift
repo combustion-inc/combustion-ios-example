@@ -34,6 +34,7 @@ struct EngineeringProbeDetails: View {
         VStack(alignment: .leading) {
             Group {
                 Text("Serial = \(probe.name)")
+                Text("FW Ver = \(probe.firmareVersion ?? "??")")
                 Text("MAC = \(probe.macAddressString)")
                 Text("RSSI   = \(probe.rssi)")
                 let connected = probe.connectionState == .connected
