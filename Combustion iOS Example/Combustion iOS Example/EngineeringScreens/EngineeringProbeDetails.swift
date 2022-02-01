@@ -81,11 +81,6 @@ struct EngineeringProbeDetails: View {
         
             Spacer(minLength: 400)
         }
-        .onDisappear {
-            if probe.connectionState == .connected {
-                probe.disconnect()
-            }
-        }
     }
     
     func shareRecords() {

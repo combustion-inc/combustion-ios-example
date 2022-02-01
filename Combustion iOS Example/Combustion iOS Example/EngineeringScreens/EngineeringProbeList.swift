@@ -30,6 +30,15 @@ import CombustionBLE
 struct EngineeringProbeList: View {
     @ObservedObject var deviceManager = DeviceManager.shared
     
+    init() {
+        // This code can be used to create Simulated probes
+        // which allow for UI testing without devices
+        
+        //deviceManager.addSimulatedProbe()
+        //deviceManager.addSimulatedProbe()
+        //deviceManager.addSimulatedProbe()
+    }
+    
     var body: some View {
         NavigationView {
             List {
