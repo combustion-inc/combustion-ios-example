@@ -44,8 +44,10 @@ struct EngineeringProbeList: View {
             List {
                 ForEach(deviceManager.probes.keys.sorted(), id: \.self) { key in
                     if let probe = deviceManager.probes[key] {
-                        NavigationLink(destination: EngineeringProbeDetails(probe: probe)) {
-                            EngineeringProbeRow(probe: probe)
+                        Section {
+                            NavigationLink(destination: EngineeringProbeDetails(probe: probe)) {
+                                EngineeringProbeRow(probe: probe)
+                            }
                         }
                     }
                 }
