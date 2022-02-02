@@ -31,16 +31,34 @@ struct EngineeringProbeRow: View {
     @ObservedObject var probe: Probe
 
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Serial = \(probe.name)")
-            Text("MAC = \(probe.macAddressString)")
-            Text("RSSI   = \(probe.rssi)")
+        VStack(alignment: .leading, spacing: 2) {
+            makeRow(key: "Serial", data: probe.name)
+            makeRow(key: "MAC", data: probe.macAddressString)
+            makeRow(key: "RSSI", data: "\(probe.rssi)")
+            Divider()
+                .padding(.vertical, 12)
             
             if let temps = probe.currentTemperatures {
                 let tempStrings = temps.values.map { String(format: "%.02f", $0) }
-                Text("\(tempStrings[0]), \(tempStrings[1]), \(tempStrings[2]), \(tempStrings[3])")
-                Text("\(tempStrings[4]), \(tempStrings[5]), \(tempStrings[6]), \(tempStrings[7])")
+                
+                Group() {
+                    ForEach(tempStrings.indices) {i in
+                        makeRow(key: "T\(i + 1)", data: "\(tempStrings[i])")
+                    }
+                }
             }
+        }.padding(.vertical, 8)
+    }
+
+    func makeRow(key:String, data:String) -> some View {
+        let row = HStack() {
+            Text(key)
+                .frame(minWidth: 60, alignment: .leading)
+            Text(data)
+                .font(.system(.body, design: .monospaced))
+                .frame(alignment: .leading)
+            Spacer()
         }
+        return row
     }
 }
