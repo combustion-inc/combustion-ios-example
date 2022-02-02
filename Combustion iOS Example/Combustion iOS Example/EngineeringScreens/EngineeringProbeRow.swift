@@ -31,25 +31,40 @@ struct EngineeringProbeRow: View {
     @ObservedObject var probe: Probe
 
     var body: some View {
-            VStack(alignment: .leading, spacing: 2) {
-
-                makeRow(key: "Serial", data: probe.name)
-                makeRow(key: "MAC", data: probe.macAddressString)
-                makeRow(key: "RSSI", data: "\(probe.rssi)")
-                
-                if let temps = probe.currentTemperatures {
-                    let tempStrings = temps.values.map { String(format: "%.02f", $0) }
-                    
+        VStack() {
+            // overlays the connection status icon and the serial/mac/rssi
+            ZStack {
+                HStack {
+                    Spacer()
+                    if (probe.connectionState == .connected) {
+                        Image(systemName: "circle.fill").foregroundColor(Color.green)
+                    } else if (probe.connectionState == .connecting) {
+                        Image(systemName: "circle.fill").foregroundColor(Color.yellow)
+                    } else if (probe.connectionState == .disconnected) {
+                        Image(systemName: "circle").foregroundColor(Color.gray)
+                    } else if (probe.connectionState == .failed) {
+                        Image(systemName: "exclamationmark.circle.fill").foregroundColor(Color.red)
+                    }
+                }.padding(.trailing)
+                VStack(alignment: .leading, spacing: 2) {
+                    makeRow(key: "Serial", data: probe.name)
+                    makeRow(key: "MAC", data: probe.macAddressString)
+                    makeRow(key: "RSSI", data: "\(probe.rssi)")
+                }
+            }
+            
+            // sensors
+            if let temps = probe.currentTemperatures {
+                let tempStrings = temps.values.map { String(format: "%.02f", $0) }
+                VStack(alignment: .leading, spacing: 2) {
                     Divider()
                         .padding(.vertical, 12)
-    
-                    Group() {
-                        ForEach(tempStrings.indices) {i in
-                            makeRow(key: "T\(i + 1)", data: "\(tempStrings[i])")
-                        }
+                    ForEach(tempStrings.indices) {i in
+                        makeRow(key: "T\(i + 1)", data: "\(tempStrings[i])")
                     }
                 }
-            }.padding(.vertical, 8)
+            }
+        }.padding(.vertical, 8)
     }
 
     func makeRow(key:String, data:String) -> some View {
