@@ -31,16 +31,52 @@ struct EngineeringProbeRow: View {
     @ObservedObject var probe: Probe
 
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Serial = \(probe.name)")
-            Text("MAC = \(probe.macAddressString)")
-            Text("RSSI   = \(probe.rssi)")
+        VStack() {
+            // overlays the connection status icon and the serial/mac/rssi
+            ZStack {
+                HStack {
+                    Spacer()
+                    if (probe.connectionState == .connected) {
+                        Image(systemName: "circle.fill").foregroundColor(Color.green)
+                    } else if (probe.connectionState == .connecting) {
+                        Image(systemName: "circle.fill").foregroundColor(Color.yellow)
+                    } else if (probe.connectionState == .disconnected) {
+                        Image(systemName: "circle").foregroundColor(Color.gray)
+                    } else if (probe.connectionState == .failed) {
+                        Image(systemName: "exclamationmark.circle.fill").foregroundColor(Color.red)
+                    }
+                }.padding(.trailing)
+                VStack(alignment: .leading, spacing: 2) {
+                    makeRow(key: "Serial", data: probe.name)
+                    makeRow(key: "MAC", data: probe.macAddressString)
+                    makeRow(key: "RSSI", data: "\(probe.rssi)")
+                }
+            }
             
+            // sensors
             if let temps = probe.currentTemperatures {
                 let tempStrings = temps.values.map { String(format: "%.02f", $0) }
-                Text("\(tempStrings[0]), \(tempStrings[1]), \(tempStrings[2]), \(tempStrings[3])")
-                Text("\(tempStrings[4]), \(tempStrings[5]), \(tempStrings[6]), \(tempStrings[7])")
+                VStack(alignment: .leading, spacing: 2) {
+                    Divider()
+                        .padding(.top, 8)
+                        .padding(.bottom, 12)
+                    ForEach(tempStrings.indices) {i in
+                        makeRow(key: "T\(i + 1)", data: "\(tempStrings[i])")
+                    }
+                }
             }
+        }.padding(.vertical, 8)
+    }
+
+    func makeRow(key:String, data:String) -> some View {
+        let row = HStack() {
+            Text(key)
+                .frame(minWidth: 60, alignment: .leading)
+            Text(data)
+                .font(.system(.body, design: .monospaced))
+                .frame(alignment: .leading)
+            Spacer()
         }
+        return row
     }
 }
