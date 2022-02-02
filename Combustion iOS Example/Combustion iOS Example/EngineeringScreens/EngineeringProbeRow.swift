@@ -58,7 +58,8 @@ struct EngineeringProbeRow: View {
                 let tempStrings = temps.values.map { String(format: "%.02f", $0) }
                 VStack(alignment: .leading, spacing: 2) {
                     Divider()
-                        .padding(.vertical, 12)
+                        .padding(.top, 8)
+                        .padding(.bottom, 12)
                     ForEach(tempStrings.indices) {i in
                         makeRow(key: "T\(i + 1)", data: "\(tempStrings[i])")
                     }
