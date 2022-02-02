@@ -31,56 +31,64 @@ struct EngineeringProbeDetails: View {
     @ObservedObject var probe: Probe
 
     var body: some View {
-        VStack(alignment: .leading) {
-            Group {
-                Text("Serial = \(probe.name)")
-                Text("FW Ver = \(probe.firmareVersion ?? "??")")
-                Text("MAC = \(probe.macAddressString)")
-                Text("RSSI   = \(probe.rssi)")
-                let connected = probe.connectionState == .connected
-                Text("Connected = \(connected.description)")
-                if let status = probe.status {
-                    Text("Records = \(status.minSequenceNumber) : \(status.maxSequenceNumber)")
-                }
-                else {
-                    Text("Records = ?? : ??")
-                }
-                
-                Text("Logged records: \(probe.temperatureLog.dataPoints.count)")
+        VStack() {
+            List {
+                Section(header: Text("Probe")) {
+                    
+                    if (probe.connectionState == .connected) {
+                        makeRow(key: "Connection", data: "\(probe.connectionState)", image: Image(systemName: "circle.fill"), color: Color.green)
+                    } else if (probe.connectionState == .connecting) {
+                        makeRow(key: "Connection", data: "\(probe.connectionState)", image: Image(systemName: "circle.fill"), color: Color.yellow)
+                    } else if (probe.connectionState == .disconnected) {
+                        makeRow(key: "Connection", data: "\(probe.connectionState)", image: Image(systemName: "circle"), color: Color.gray)
+                    } else if (probe.connectionState == .failed) {
+                        makeRow(key: "Connection", data: "\(probe.connectionState)", image: Image(systemName: "exclamationmark.circle.fill"), color: Color.red)
+                    }
 
+                    makeRow(key: "Serial", data: probe.name)
+                    makeRow(key: "MAC", data: "\(probe.macAddressString)")
+                    makeRow(key: "RSSI", data: "\(probe.rssi)")
+                    makeRow(key: "Firmware", data: "\(probe.firmareVersion ?? "—")")
+
+                    if let status = probe.status {
+                        makeRow(key: "Records", data: "\(status.minSequenceNumber) : \(status.maxSequenceNumber)")
+                    }
+                    else {
+                        makeRow(key: "Records", data: "-- : --")
+                    }
+                    makeRow(key: "Records logged", data: "\(probe.temperatureLog.dataPoints.count)")
+                }
                 if let temps = probe.currentTemperatures {
                     let tempStrings = temps.values.map { String(format: "%.02f", $0) }
-                    Text("\(tempStrings[0]), \(tempStrings[1]), \(tempStrings[2]), \(tempStrings[3])")
-                    Text("\(tempStrings[4]), \(tempStrings[5]), \(tempStrings[6]), \(tempStrings[7])")
+                    Section(header: Text("Sensors")) {
+                        ForEach(tempStrings.indices) { i in
+                            makeRow(key: "T\(i + 1)", data: tempStrings[i])
+                        }
+                    }
                 }
-            }
-       
-            Spacer()
-            
-            Button(action: {
-                if probe.connectionState == .connected {
-                    probe.disconnect()
-                }
-                else {
-                    probe.connect()
-                }
-            }){
-                let title = probe.connectionState == .connected ? "Disconnect" : "Connect"
-                Text(title).font(.title)
-            }
-                 
-            Spacer()
-            
-            Button(action: shareRecords) {
-                Image(systemName: "square.and.arrow.up")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 36, height: 36)
-            }.disabled(!probe.logsUpToDate)
-        
-        
-            Spacer(minLength: 400)
+            }.listStyle(InsetGroupedListStyle())
         }
+        .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                Button(action: {
+                    if probe.connectionState == .connected {
+                        probe.disconnect()
+                    }
+                    else {
+                        probe.connect()
+                    }
+                }, label: {
+                    let state = probe.connectionState == .connected ? "Disconnect" : "Connect"
+                    Text(state)
+                })
+            }
+            ToolbarItem(placement: .navigation) {
+                Button(action: shareRecords, label: {
+                    Image(systemName: "square.and.arrow.up")
+                })
+            }
+        }
+        .navigationTitle("\(probe.name)")
     }
     
     func shareRecords() {
@@ -89,5 +97,33 @@ struct EngineeringProbeDetails: View {
         let activityVC = UIActivityViewController(activityItems: [csvUrl], applicationActivities: nil)
         UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
         // TODO clean up temp file on completion
+    }
+
+    func makeRow(key:String, data:String) -> some View {
+        let row = HStack() {
+            Text(key)
+            Spacer()
+            Text(data)
+                .font(.system(.body, design: .monospaced))
+        }
+        return row
+    }
+
+    func makeRow(key:String, data:String, image:Image, color:Color) -> some View {
+        let row = HStack() {
+            Text(key)
+            Spacer()
+            Text(capFirstLetter(string:data))
+                .font(.system(.body, design: .monospaced))
+            image.foregroundColor(color)
+        }
+        return row
+    }
+    
+    func capFirstLetter(string:String) -> String {
+        var text = string
+        let cap = "\(text.remove(at: text.startIndex))"
+        text = "\(cap.capitalized)\(text)"
+        return text
     }
 }
