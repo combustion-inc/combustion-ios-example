@@ -47,11 +47,12 @@ struct EngineeringProbeDetails: View {
 
                     makeRow(key: "Serial", data: probe.name)
                     makeRow(key: "MAC", data: "\(probe.macAddressString)")
+                    makeRow(key: "ID", data: "\(probe.id)")
                     makeRow(key: "RSSI", data: "\(probe.rssi)")
                     makeRow(key: "Firmware", data: "\(probe.firmareVersion ?? "—")")
 
-                    if let status = probe.status {
-                        makeRow(key: "Records", data: "\(status.minSequenceNumber) : \(status.maxSequenceNumber)")
+                    if let min = probe.minSequenceNumber, let max = probe.maxSequenceNumber {
+                        makeRow(key: "Records", data: "\(min) : \(max)")
                     }
                     else {
                         makeRow(key: "Records", data: "-- : --")
