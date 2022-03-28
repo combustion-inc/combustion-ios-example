@@ -29,6 +29,9 @@ import CombustionBLE
 
 struct EngineeringProbeDetails: View {
     @ObservedObject var probe: Probe
+    
+    @State private var showingIDSelection = false
+    @State private var showingColorSelection = false
 
     var body: some View {
         VStack() {
@@ -48,6 +51,7 @@ struct EngineeringProbeDetails: View {
                     makeRow(key: "Serial", data: probe.name)
                     makeRow(key: "MAC", data: "\(probe.macAddressString)")
                     makeRow(key: "ID", data: "\(probe.id)")
+                    makeRow(key: "Color", data: "\(probe.color)")
                     makeRow(key: "RSSI", data: "\(probe.rssi)")
                     makeRow(key: "Firmware", data: "\(probe.firmareVersion ?? "—")")
 
@@ -62,8 +66,8 @@ struct EngineeringProbeDetails: View {
                 if let temps = probe.currentTemperatures {
                     let tempStrings = temps.values.map { String(format: "%.02f", $0) }
                     Section(header: Text("Sensors")) {
-                        ForEach(tempStrings.indices) { i in
-                            makeRow(key: "T\(i + 1)", data: tempStrings[i])
+                        ForEach(Array(tempStrings.enumerated()), id: \.offset) { index, element in
+                            makeRow(key: "T\(index + 1)", data: element)
                         }
                     }
                 }
@@ -82,6 +86,32 @@ struct EngineeringProbeDetails: View {
                     let state = probe.connectionState == .connected ? "Disconnect" : "Connect"
                     Text(state)
                 })
+            }
+            ToolbarItem(placement: .bottomBar) {
+                Button("Set ID") {
+                    showingIDSelection = true
+                }
+                .confirmationDialog("Select Probe ID", isPresented: $showingIDSelection, titleVisibility: .visible) {
+                    ForEach(ProbeID.allCases, id: \.self) { probeID in
+                        Button(String(describing: probeID)) {
+                            DeviceManager.shared.setProbeID(probe, id: probeID)
+                        }
+                    }
+                }
+                .disabled(probe.connectionState != .connected)
+            }
+            ToolbarItem(placement: .bottomBar) {
+                Button("Set Color") {
+                    showingColorSelection = true
+                }
+                .confirmationDialog("Select Color", isPresented: $showingColorSelection, titleVisibility: .visible) {
+                    ForEach(ProbeColor.allCases, id: \.self) { color in
+                        Button(String(describing: color)) {
+                            DeviceManager.shared.setProbeColor(probe, color: color)
+                        }
+                    }
+                }
+                .disabled(probe.connectionState != .connected)
             }
             ToolbarItem(placement: .navigation) {
                 Button(action: shareRecords, label: {
