@@ -32,6 +32,8 @@ struct EngineeringProbeDetails: View {
     
     @State private var showingIDSelection = false
     @State private var showingColorSelection = false
+    @State private var showingSetColorFailAlert = false
+    @State private var showingSetIDFailAlert = false
 
     var body: some View {
         VStack() {
@@ -94,9 +96,16 @@ struct EngineeringProbeDetails: View {
                 .confirmationDialog("Select Probe ID", isPresented: $showingIDSelection, titleVisibility: .visible) {
                     ForEach(ProbeID.allCases, id: \.self) { probeID in
                         Button(String(describing: probeID)) {
-                            DeviceManager.shared.setProbeID(probe, id: probeID)
+                            DeviceManager.shared.setProbeID(probe, id: probeID, completionHandler: { success in
+                                if(!success) {
+                                    showingSetIDFailAlert = true
+                                }
+                            })
                         }
                     }
+                }
+                .alert("Failed to set ID", isPresented: $showingSetIDFailAlert) {
+                    Button("OK", role: .cancel) { }
                 }
                 .disabled(probe.connectionState != .connected)
             }
@@ -107,9 +116,16 @@ struct EngineeringProbeDetails: View {
                 .confirmationDialog("Select Color", isPresented: $showingColorSelection, titleVisibility: .visible) {
                     ForEach(ProbeColor.allCases, id: \.self) { color in
                         Button(String(describing: color)) {
-                            DeviceManager.shared.setProbeColor(probe, color: color)
+                            DeviceManager.shared.setProbeColor(probe, color: color, completionHandler: { (success) in
+                                if(!success) {
+                                    showingSetColorFailAlert = true
+                                }
+                            })
                         }
                     }
+                }
+                .alert("Failed to set color", isPresented: $showingSetColorFailAlert) {
+                    Button("OK", role: .cancel) { }
                 }
                 .disabled(probe.connectionState != .connected)
             }
