@@ -1,25 +1,23 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "combustion-ios-ble",
-        "repositoryURL": "https://github.com/combustion-inc/combustion-ios-ble",
-        "state": {
-          "branch": null,
-          "revision": "c6510af27a60ed8a139ce6724cf3bc88877c0b14",
-          "version": "0.7.4"
-        }
-      },
-      {
-        "package": "swift-collections",
-        "repositoryURL": "https://github.com/apple/swift-collections",
-        "state": {
-          "branch": null,
-          "revision": "48254824bb4248676bf7ce56014ff57b142b77eb",
-          "version": "1.0.2"
-        }
+  "pins" : [
+    {
+      "identity" : "combustion-ios-ble",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/combustion-inc/combustion-ios-ble",
+      "state" : {
+        "revision" : "680b20f15fac22775f8e8ae9889e8539fbdaff15",
+        "version" : "0.8.0"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "swift-collections",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-collections",
+      "state" : {
+        "revision" : "48254824bb4248676bf7ce56014ff57b142b77eb",
+        "version" : "1.0.2"
+      }
+    }
+  ],
+  "version" : 2
 }

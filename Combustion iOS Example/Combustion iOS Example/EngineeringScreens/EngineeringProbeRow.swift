@@ -49,6 +49,8 @@ struct EngineeringProbeRow: View {
                 VStack(alignment: .leading, spacing: 2) {
                     makeRow(key: "Serial", data: probe.name)
                     makeRow(key: "MAC", data: probe.macAddressString)
+                    makeRow(key: "ID", data: "\(probe.id)")
+                    makeRow(key: "Color", data: "\(probe.color)")
                     makeRow(key: "RSSI", data: "\(probe.rssi)")
                 }
             }
