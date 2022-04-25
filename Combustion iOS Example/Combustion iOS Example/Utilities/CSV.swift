@@ -28,18 +28,20 @@ struct CSV {
         // TODO app version to this header
         
         // Header
-        output.append("SequenceNumber,T1,T2,T3,T4,T5,T6,T7,T8")
+        output.append("SessionID,SequenceNumber,T1,T2,T3,T4,T5,T6,T7,T8")
         
         // Add temperature data points
-        for dp in probe.temperatureLog.dataPoints {
-            output.append(String(format: "%d,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f",
-                                 dp.sequenceNum,
-                                 dp.temperatures.values[0], dp.temperatures.values[1],
-                                 dp.temperatures.values[2], dp.temperatures.values[3],
-                                 dp.temperatures.values[4], dp.temperatures.values[5],
-                                 dp.temperatures.values[6], dp.temperatures.values[7]))
+        for session in probe.temperatureLogs {
+            for dataPoint in session.dataPoints {
+                output.append(String(format: "%d,%d,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f",
+                                     session.id,
+                                     dataPoint.sequenceNum,
+                                     dataPoint.temperatures.values[0], dataPoint.temperatures.values[1],
+                                     dataPoint.temperatures.values[2], dataPoint.temperatures.values[3],
+                                     dataPoint.temperatures.values[4], dataPoint.temperatures.values[5],
+                                     dataPoint.temperatures.values[6], dataPoint.temperatures.values[7]))
+            }
         }
-        
         
         return output.joined(separator: "\n")
     }

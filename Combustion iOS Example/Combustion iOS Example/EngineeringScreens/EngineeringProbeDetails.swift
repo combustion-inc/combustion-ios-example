@@ -34,6 +34,14 @@ struct EngineeringProbeDetails: View {
     @State private var showingColorSelection = false
     @State private var showingSetColorFailAlert = false
     @State private var showingSetIDFailAlert = false
+    
+    let sessionDateFormatter: DateFormatter
+        
+    init(probe: Probe) {
+        self.probe = probe
+        sessionDateFormatter = DateFormatter()
+        sessionDateFormatter.dateFormat = "HH:mm:ss"
+    }
 
     var body: some View {
         VStack() {
@@ -64,8 +72,22 @@ struct EngineeringProbeDetails: View {
                     else {
                         makeRow(key: "Records", data: "-- : --")
                     }
-                    makeRow(key: "Records logged", data: "\(probe.temperatureLog.dataPoints.count)")
+                    
+                    
                 }
+                
+                Section(header: Text("Sessions")) {
+                    ForEach(probe.temperatureLogs) { log in
+                        
+                        if let startTime = log.startTime {
+                            makeRow(key: "ID: \(log.id) (\(sessionDateFormatter.string(from: startTime)))", data: "\(log.dataPoints.count)")
+                        }
+                        else {
+                            makeRow(key: "ID: \(log.id) (--:--:--)", data: "\(log.dataPoints.count)")
+                        }
+                    }
+                }
+                
                 if let temps = probe.currentTemperatures {
                     let tempStrings = temps.values.map { String(format: "%.02f", $0) }
                     Section(header: Text("Sensors")) {
