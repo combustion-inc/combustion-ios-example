@@ -29,6 +29,11 @@ import CombustionBLE
 
 struct EngineeringProbeDetails: View {
     @ObservedObject var probe: Probe
+    
+    @State private var showingIDSelection = false
+    @State private var showingColorSelection = false
+    @State private var showingSetColorFailAlert = false
+    @State private var showingSetIDFailAlert = false
 
     var body: some View {
         VStack() {
@@ -47,11 +52,14 @@ struct EngineeringProbeDetails: View {
 
                     makeRow(key: "Serial", data: probe.name)
                     makeRow(key: "MAC", data: "\(probe.macAddressString)")
+                    makeRow(key: "ID", data: "\(probe.id)")
+                    makeRow(key: "Color", data: "\(probe.color)")
                     makeRow(key: "RSSI", data: "\(probe.rssi)")
                     makeRow(key: "Firmware", data: "\(probe.firmareVersion ?? "—")")
+                    makeRow(key: "Hardware rev", data: "\(probe.hardwareRevision ?? "—")")
 
-                    if let status = probe.status {
-                        makeRow(key: "Records", data: "\(status.minSequenceNumber) : \(status.maxSequenceNumber)")
+                    if let min = probe.minSequenceNumber, let max = probe.maxSequenceNumber {
+                        makeRow(key: "Records", data: "\(min) : \(max)")
                     }
                     else {
                         makeRow(key: "Records", data: "-- : --")
@@ -61,8 +69,8 @@ struct EngineeringProbeDetails: View {
                 if let temps = probe.currentTemperatures {
                     let tempStrings = temps.values.map { String(format: "%.02f", $0) }
                     Section(header: Text("Sensors")) {
-                        ForEach(tempStrings.indices) { i in
-                            makeRow(key: "T\(i + 1)", data: tempStrings[i])
+                        ForEach(Array(tempStrings.enumerated()), id: \.offset) { index, element in
+                            makeRow(key: "T\(index + 1)", data: element)
                         }
                     }
                 }
@@ -81,6 +89,46 @@ struct EngineeringProbeDetails: View {
                     let state = probe.connectionState == .connected ? "Disconnect" : "Connect"
                     Text(state)
                 })
+            }
+            ToolbarItem(placement: .bottomBar) {
+                Button("Set ID") {
+                    showingIDSelection = true
+                }
+                .confirmationDialog("Select Probe ID", isPresented: $showingIDSelection, titleVisibility: .visible) {
+                    ForEach(ProbeID.allCases, id: \.self) { probeID in
+                        Button(String(describing: probeID)) {
+                            DeviceManager.shared.setProbeID(probe, id: probeID, completionHandler: { success in
+                                if(!success) {
+                                    showingSetIDFailAlert = true
+                                }
+                            })
+                        }
+                    }
+                }
+                .alert("Failed to set ID", isPresented: $showingSetIDFailAlert) {
+                    Button("OK", role: .cancel) { }
+                }
+                .disabled(probe.connectionState != .connected)
+            }
+            ToolbarItem(placement: .bottomBar) {
+                Button("Set Color") {
+                    showingColorSelection = true
+                }
+                .confirmationDialog("Select Color", isPresented: $showingColorSelection, titleVisibility: .visible) {
+                    ForEach(ProbeColor.allCases, id: \.self) { color in
+                        Button(String(describing: color)) {
+                            DeviceManager.shared.setProbeColor(probe, color: color, completionHandler: { (success) in
+                                if(!success) {
+                                    showingSetColorFailAlert = true
+                                }
+                            })
+                        }
+                    }
+                }
+                .alert("Failed to set color", isPresented: $showingSetColorFailAlert) {
+                    Button("OK", role: .cancel) { }
+                }
+                .disabled(probe.connectionState != .connected)
             }
             ToolbarItem(placement: .navigation) {
                 Button(action: shareRecords, label: {

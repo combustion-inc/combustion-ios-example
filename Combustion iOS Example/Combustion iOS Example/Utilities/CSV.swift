@@ -20,10 +20,12 @@ struct CSV {
         
         output.append("Combustion Inc. Probe Data")
         output.append("Probe S/N: \(String(format: "%4X", probe.serialNumber))")
+        output.append("Probe FW version: \(probe.firmareVersion ?? "??")")
+        output.append("Probe HW revision: \(probe.hardwareRevision ?? "??")")
         output.append("\(dateString)")
         output.append("")
         
-        // TODO, add probe firmware version and app version to this header
+        // TODO app version to this header
         
         // Header
         output.append("SequenceNumber,T1,T2,T3,T4,T5,T6,T7,T8")
