@@ -43,7 +43,6 @@ struct EngineeringProbeDetails: View {
         VStack() {
             List {
                 Section(header: Text("Probe")) {
-                    
                     if (probe.connectionState == .connected) {
                         makeRow(key: "Connection", data: "\(probe.connectionState)", image: Image(systemName: "circle.fill"), color: Color.green)
                     } else if (probe.connectionState == .connecting) {
@@ -61,14 +60,27 @@ struct EngineeringProbeDetails: View {
                     makeRow(key: "RSSI", data: "\(probe.rssi)")
                     makeRow(key: "Firmware", data: "\(probe.firmareVersion ?? "—")")
                     makeRow(key: "Hardware rev", data: "\(probe.hardwareRevision ?? "—")")
-
-                    if let min = probe.minSequenceNumber, let max = probe.maxSequenceNumber {
-                        makeRow(key: "Records", data: "\(min) : \(max)")
+                }
+                Section(header: Text("Records")) {
+                    if probe.connectionState == .connected,
+                        let min = probe.minSequenceNumber, let max = probe.maxSequenceNumber {
+                        makeRow(key: "Range on probe", data: "\(min) : \(max)")
                     }
                     else {
-                        makeRow(key: "Records", data: "-- : --")
+                        makeRow(key: "Range on probe", data: "-- : --")
                     }
-                    makeRow(key: "Records logged", data: "\(probe.temperatureLog.dataPoints.count)")
+                    
+                    makeRow(key: "Records downloaded", data: "\(probe.temperatureLog.dataPoints.count)")
+                    
+                    if probe.connectionState == .disconnected {
+                        makeRow(key: "Records downloaded", data: "-")
+                    }
+                    else if probe.logsUpToDate {
+                        makeRow(key: "Downloading records", data: "Complete")
+                    }
+                    else {
+                        makeRow(key: "Downloading records", data: "In progress")
+                    }
                 }
                 if let temps = probe.currentTemperatures {
                     let tempStrings = temps.values.map { String(format: "%.02f", $0) }
@@ -138,6 +150,8 @@ struct EngineeringProbeDetails: View {
                 Button(action: shareRecords, label: {
                     Image(systemName: "square.and.arrow.up")
                 })
+                .disabled(!probe.logsUpToDate)
+                .opacity(probe.logsUpToDate ? 1.0 : 0.3)
             }
         }
         .navigationTitle("\(probe.name)")
