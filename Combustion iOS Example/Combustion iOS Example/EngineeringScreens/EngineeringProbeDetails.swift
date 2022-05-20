@@ -34,6 +34,10 @@ struct EngineeringProbeDetails: View {
     @State private var showingColorSelection = false
     @State private var showingSetColorFailAlert = false
     @State private var showingSetIDFailAlert = false
+    @State private var showingShareSheet = false
+    @State private var showingShareFailAlert = false
+    
+    @State private var csvUrl: URL?
 
     var body: some View {
         VStack() {
@@ -137,14 +141,22 @@ struct EngineeringProbeDetails: View {
             }
         }
         .navigationTitle("\(probe.name)")
+        .sheet(isPresented: $showingShareSheet) {
+            ShareSheet(activityItems: [csvUrl as Any])
+        }
+        .alert("Failed to export CSV", isPresented: $showingShareFailAlert) {
+            Button("OK", role: .cancel) { }
+        }
     }
     
-    func shareRecords() {
-        // Generate the CSV file
-        guard let csvUrl = CSV.createCsvFile(probe: probe) else { return }
-        let activityVC = UIActivityViewController(activityItems: [csvUrl], applicationActivities: nil)
-        UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
-        // TODO clean up temp file on completion
+    private func shareRecords() {
+        if let url = CSV.createCsvFile(probe: probe) {
+            csvUrl = url
+            showingShareSheet = true
+        }
+        else {
+            showingShareFailAlert = true
+        }
     }
 
     func makeRow(key:String, data:String) -> some View {
