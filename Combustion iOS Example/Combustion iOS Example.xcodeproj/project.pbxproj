@@ -15,6 +15,7 @@
 		539BF83C276282EC005E2EFF /* EngineeringApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539BF83B276282EC005E2EFF /* EngineeringApp.swift */; };
 		539BF8422762AD5D005E2EFF /* CSV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539BF8412762AD5D005E2EFF /* CSV.swift */; };
 		539BF8482763D0E0005E2EFF /* CombustionBLE in Frameworks */ = {isa = PBXBuildFile; productRef = 539BF8472763D0E0005E2EFF /* CombustionBLE */; };
+		F5AE5AC42837F99D001D33A6 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5AE5AC32837F99D001D33A6 /* ShareSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		539BF83B276282EC005E2EFF /* EngineeringApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineeringApp.swift; sourceTree = "<group>"; };
 		539BF8412762AD5D005E2EFF /* CSV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CSV.swift; sourceTree = "<group>"; };
 		539BF8432762B226005E2EFF /* Combustion-iOS-Example-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Combustion-iOS-Example-Info.plist"; sourceTree = SOURCE_ROOT; };
+		F5AE5AC32837F99D001D33A6 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 				539BF835276282D5005E2EFF /* EngineeringProbeDetails.swift */,
 				539BF836276282D5005E2EFF /* EngineeringProbeList.swift */,
 				539BF837276282D5005E2EFF /* EngineeringProbeRow.swift */,
+				F5AE5AC32837F99D001D33A6 /* ShareSheet.swift */,
 			);
 			path = EngineeringScreens;
 			sourceTree = "<group>";
@@ -174,6 +177,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				539BF83A276282D5005E2EFF /* EngineeringProbeRow.swift in Sources */,
+				F5AE5AC42837F99D001D33A6 /* ShareSheet.swift in Sources */,
 				539BF839276282D5005E2EFF /* EngineeringProbeList.swift in Sources */,
 				539BF8422762AD5D005E2EFF /* CSV.swift in Sources */,
 				539BF838276282D5005E2EFF /* EngineeringProbeDetails.swift in Sources */,
@@ -325,7 +329,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.2;
+				MARKETING_VERSION = 0.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = inc.combustion.Engineering;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -360,7 +364,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.2;
+				MARKETING_VERSION = 0.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = inc.combustion.Engineering;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
