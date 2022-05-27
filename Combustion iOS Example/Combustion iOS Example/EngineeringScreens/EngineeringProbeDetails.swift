@@ -82,9 +82,16 @@ struct EngineeringProbeDetails: View {
                         makeRow(key: "Downloading records", data: "In progress")
                     }
                 }
-                if let temps = probe.currentTemperatures {
-                    let tempStrings = temps.values.map { String(format: "%.02f", $0) }
-                    Section(header: Text("Sensors")) {
+                Section(header: Text("Sensors")) {
+                    if let instantReadTemperature = probe.instantReadTemperature {
+                        makeRow(key: "Instant Read", data: String(format: "%.02f", instantReadTemperature))
+                    }
+                    else {
+                        makeRow(key: "Instant Read", data: "--")
+                    }
+                    
+                    if let temps = probe.currentTemperatures {
+                        let tempStrings = temps.values.map { String(format: "%.02f", $0) }
                         ForEach(Array(tempStrings.enumerated()), id: \.offset) { index, element in
                             makeRow(key: "T\(index + 1)", data: element)
                         }
