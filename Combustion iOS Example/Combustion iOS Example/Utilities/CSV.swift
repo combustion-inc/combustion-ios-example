@@ -19,6 +19,7 @@ struct CSV {
         let dateString = dateFormatter.string(from: date)
         
         output.append("Combustion Inc. Probe Data")
+        output.append("CSV version: 2")
         output.append("Probe S/N: \(String(format: "%4X", probe.serialNumber))")
         output.append("Probe FW version: \(probe.firmareVersion ?? "??")")
         output.append("Probe HW revision: \(probe.hardwareRevision ?? "??")")
