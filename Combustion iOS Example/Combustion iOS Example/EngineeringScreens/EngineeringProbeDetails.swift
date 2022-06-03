@@ -38,6 +38,14 @@ struct EngineeringProbeDetails: View {
     @State private var showingShareFailAlert = false
     
     @State private var csvUrl: URL?
+    
+    let sessionDateFormatter: DateFormatter
+        
+    init(probe: Probe) {
+        self.probe = probe
+        sessionDateFormatter = DateFormatter()
+        sessionDateFormatter.dateFormat = "HH:mm:ss"
+    }
 
     var body: some View {
         VStack() {
@@ -70,8 +78,6 @@ struct EngineeringProbeDetails: View {
                         makeRow(key: "Range on probe", data: "-- : --")
                     }
                     
-                    makeRow(key: "Records downloaded", data: "\(probe.temperatureLog.dataPoints.count)")
-                    
                     if probe.connectionState == .disconnected {
                         makeRow(key: "Records downloaded", data: "-")
                     }
@@ -82,6 +88,19 @@ struct EngineeringProbeDetails: View {
                         makeRow(key: "Downloading records", data: "In progress")
                     }
                 }
+                
+                Section(header: Text("Sessions")) {
+                    ForEach(probe.temperatureLogs) { log in
+                        
+                        if let startTime = log.startTime {
+                            makeRow(key: "ID: \(log.id) (\(sessionDateFormatter.string(from: startTime)))", data: "\(log.dataPoints.count)")
+                        }
+                        else {
+                            makeRow(key: "ID: \(log.id) (--:--:--)", data: "\(log.dataPoints.count)")
+                        }
+                    }
+                }
+                
                 Section(header: Text("Sensors")) {
                     if let instantReadTemperature = probe.instantReadTemperature {
                         makeRow(key: "Instant Read", data: String(format: "%.02f", instantReadTemperature))
@@ -89,9 +108,10 @@ struct EngineeringProbeDetails: View {
                     else {
                         makeRow(key: "Instant Read", data: "--")
                     }
-                    
+                
                     if let temps = probe.currentTemperatures {
                         let tempStrings = temps.values.map { String(format: "%.02f", $0) }
+
                         ForEach(Array(tempStrings.enumerated()), id: \.offset) { index, element in
                             makeRow(key: "T\(index + 1)", data: element)
                         }

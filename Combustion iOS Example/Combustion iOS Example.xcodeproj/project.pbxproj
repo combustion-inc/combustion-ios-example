@@ -401,8 +401,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/combustion-inc/combustion-ios-ble";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.9.0;
+				branch = develop;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
