@@ -66,6 +66,7 @@ struct EngineeringProbeDetails: View {
                     makeRow(key: "ID", data: "\(probe.id)")
                     makeRow(key: "Color", data: "\(probe.color)")
                     makeRow(key: "RSSI", data: "\(probe.rssi)")
+                    makeRow(key: "Battery", data: "\(probe.batteryStatus)")
                     makeRow(key: "Firmware", data: "\(probe.firmareVersion ?? "—")")
                     makeRow(key: "Hardware rev", data: "\(probe.hardwareRevision ?? "—")")
                 }
