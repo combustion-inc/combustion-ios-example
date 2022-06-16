@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/combustion-inc/combustion-ios-ble",
       "state" : {
-        "branch" : "feature/battery_status",
-        "revision" : "3ce4d7792fac277063e09844916f0bfe54fda69d"
+        "branch" : "develop",
+        "revision" : "82d64cc3b1472293b843f5454d0c1d46a63fd289"
       }
     },
     {
