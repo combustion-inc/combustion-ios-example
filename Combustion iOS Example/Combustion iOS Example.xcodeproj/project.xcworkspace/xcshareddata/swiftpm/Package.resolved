@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/combustion-inc/combustion-ios-ble",
       "state" : {
-        "revision" : "ff3978f7e16f7d795237df9f036f00b783856d93",
-        "version" : "0.10.0"
+        "revision" : "05cb177f4ddf0d5bb4c5caac680e125f2657925b",
+        "version" : "0.10.1"
       }
     },
     {
