@@ -192,7 +192,9 @@ struct EngineeringProbeDetails: View {
     }
     
     private func shareRecords() {
-        if let url = CSV.createCsvFile(probe: probe) {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+        let appVersion = "Engineering \(String(describing: version ?? "--"))"
+        if let url = CSV.createCsvFile(probe: probe, appVersion: appVersion) {
             csvUrl = url
             showingShareSheet = true
         }
