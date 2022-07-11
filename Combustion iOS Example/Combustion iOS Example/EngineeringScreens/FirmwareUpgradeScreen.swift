@@ -60,7 +60,7 @@ struct FirmwareUpgradeScreen: View {
                                 presentationMode.wrappedValue.dismiss()
                             }
                             else {
-                                print("JDJ invalid file")
+                                print("Invalid file")
                             }
                         }
                     }, label: {
