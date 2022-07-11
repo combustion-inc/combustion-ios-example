@@ -14,7 +14,9 @@
 		539BF83A276282D5005E2EFF /* EngineeringProbeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539BF837276282D5005E2EFF /* EngineeringProbeRow.swift */; };
 		539BF83C276282EC005E2EFF /* EngineeringApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539BF83B276282EC005E2EFF /* EngineeringApp.swift */; };
 		539BF8482763D0E0005E2EFF /* CombustionBLE in Frameworks */ = {isa = PBXBuildFile; productRef = 539BF8472763D0E0005E2EFF /* CombustionBLE */; };
+		F51C9749286D1B67006CDCB4 /* FirmwareUpgradeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51C9748286D1B67006CDCB4 /* FirmwareUpgradeScreen.swift */; };
 		F5AE5AC42837F99D001D33A6 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5AE5AC32837F99D001D33A6 /* ShareSheet.swift */; };
+		F5CC25E8286FBFA5003C80B2 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5CC25E7286FBFA5003C80B2 /* DocumentPicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,7 +28,9 @@
 		539BF837276282D5005E2EFF /* EngineeringProbeRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineeringProbeRow.swift; sourceTree = "<group>"; };
 		539BF83B276282EC005E2EFF /* EngineeringApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EngineeringApp.swift; sourceTree = "<group>"; };
 		539BF8432762B226005E2EFF /* Combustion-iOS-Example-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Combustion-iOS-Example-Info.plist"; sourceTree = SOURCE_ROOT; };
+		F51C9748286D1B67006CDCB4 /* FirmwareUpgradeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirmwareUpgradeScreen.swift; sourceTree = "<group>"; };
 		F5AE5AC32837F99D001D33A6 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
+		F5CC25E7286FBFA5003C80B2 /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,7 +87,9 @@
 				539BF835276282D5005E2EFF /* EngineeringProbeDetails.swift */,
 				539BF836276282D5005E2EFF /* EngineeringProbeList.swift */,
 				539BF837276282D5005E2EFF /* EngineeringProbeRow.swift */,
+				F51C9748286D1B67006CDCB4 /* FirmwareUpgradeScreen.swift */,
 				F5AE5AC32837F99D001D33A6 /* ShareSheet.swift */,
+				F5CC25E7286FBFA5003C80B2 /* DocumentPicker.swift */,
 			);
 			path = EngineeringScreens;
 			sourceTree = "<group>";
@@ -168,7 +174,9 @@
 				539BF83A276282D5005E2EFF /* EngineeringProbeRow.swift in Sources */,
 				F5AE5AC42837F99D001D33A6 /* ShareSheet.swift in Sources */,
 				539BF839276282D5005E2EFF /* EngineeringProbeList.swift in Sources */,
+				F51C9749286D1B67006CDCB4 /* FirmwareUpgradeScreen.swift in Sources */,
 				539BF838276282D5005E2EFF /* EngineeringProbeDetails.swift in Sources */,
+				F5CC25E8286FBFA5003C80B2 /* DocumentPicker.swift in Sources */,
 				539BF83C276282EC005E2EFF /* EngineeringApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -389,8 +397,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/combustion-inc/combustion-ios-ble";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.10.2;
+				branch = develop;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
