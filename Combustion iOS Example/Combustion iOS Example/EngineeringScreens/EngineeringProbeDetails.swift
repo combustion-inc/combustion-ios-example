@@ -75,6 +75,7 @@ struct EngineeringProbeDetails: View {
                             makeRow(key: "Connection", data: "\(probe.connectionState)", image: Image(systemName: "exclamationmark.circle.fill"), color: Color.red)
                         }
 
+                        makeRow(key: "Connectable", data: "\(probe.isConnectable)")
                         makeRow(key: "Serial", data: probe.name)
                         makeRow(key: "MAC", data: "\(probe.macAddressString)")
                         makeRow(key: "ID", data: "\(probe.id)")
@@ -202,7 +203,8 @@ struct EngineeringProbeDetails: View {
                     let state = probe.connectionState == .connected ? "Disconnect" : "Connect"
                     Text(state)
                 })
-                .disabled(probe.isDFURunning())
+                .disabled(probe.isDFURunning() ||
+                          !probe.isConnectable && probe.connectionState != .connected)
             }
             ToolbarItem(placement: .navigation) {
                 Button(action: shareRecords, label: {
