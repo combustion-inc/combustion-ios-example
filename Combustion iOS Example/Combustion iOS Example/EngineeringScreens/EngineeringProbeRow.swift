@@ -32,53 +32,59 @@ struct EngineeringProbeRow: View {
 
     var body: some View {
         VStack() {
-            // overlays the connection status icon and the serial/mac/rssi
-            ZStack {
-                HStack {
-                    Spacer()
-                    if (probe.connectionState == .connected) {
-                        Image(systemName: "circle.fill").foregroundColor(Color.green)
-                    } else if (probe.connectionState == .connecting) {
-                        Image(systemName: "circle.fill").foregroundColor(Color.yellow)
-                    } else if (probe.connectionState == .disconnected) {
-                        Image(systemName: "circle").foregroundColor(Color.gray)
-                    } else if (probe.connectionState == .failed) {
-                        Image(systemName: "exclamationmark.circle.fill").foregroundColor(Color.red)
-                    }
-                }.padding(.trailing)
-                VStack(alignment: .leading, spacing: 2) {
-                    makeRow(key: "Serial", data: probe.name)
-                    makeRow(key: "MAC", data: probe.macAddressString)
-                    makeRow(key: "ID", data: "\(probe.id)")
-                    makeRow(key: "Color", data: "\(probe.color)")
-                    makeRow(key: "RSSI", data: "\(probe.rssi)")
-                    makeRow(key: "Battery", data: "\(probe.batteryStatus)")
-                }
-            }
             
-            VStack(alignment: .leading, spacing: 2) {
-                Divider()
-                    .padding(.top, 8)
-                    .padding(.bottom, 12)
-                
-                if let instantReadTemperature = probe.instantReadTemperature {
-                    makeRow(key: "Instant Read", data: String(format: "%.02f", instantReadTemperature))
+            if(probe.isDFURunning()) {
+                makeRow(key: "Serial", data: probe.name)
+                makeRow(key: "MAC", data: probe.macAddressString)
+                makeRow(key: "DFU", data: probe.dfuState?.description ?? "--")
+            }
+            else {
+                ZStack {
+                    HStack {
+                        Spacer()
+                        if (probe.connectionState == .connected) {
+                            Image(systemName: "circle.fill").foregroundColor(Color.green)
+                        } else if (probe.connectionState == .connecting) {
+                            Image(systemName: "circle.fill").foregroundColor(Color.yellow)
+                        } else if (probe.connectionState == .disconnected) {
+                            Image(systemName: "circle").foregroundColor(Color.gray)
+                        } else if (probe.connectionState == .failed) {
+                            Image(systemName: "exclamationmark.circle.fill").foregroundColor(Color.red)
+                        }
+                    }.padding(.trailing)
+                    VStack(alignment: .leading, spacing: 2) {
+                        makeRow(key: "Serial", data: probe.name)
+                        makeRow(key: "MAC", data: probe.macAddressString)
+                        makeRow(key: "ID", data: "\(probe.id)")
+                        makeRow(key: "Color", data: "\(probe.color)")
+                        makeRow(key: "RSSI", data: "\(probe.rssi)")
+                        makeRow(key: "Battery", data: "\(probe.batteryStatus)")
+                    }
                 }
-                else {
-                    makeRow(key: "Instant Read", data: "--")
-                }
                 
-                if let temps = probe.currentTemperatures {
+                VStack(alignment: .leading, spacing: 2) {
                     Divider()
                         .padding(.top, 8)
                         .padding(.bottom, 12)
                     
-                    let tempStrings = temps.values.map { String(format: "%.02f", $0) }
-                    ForEach(tempStrings.indices) {i in
-                        makeRow(key: "T\(i + 1)", data: "\(tempStrings[i])")
+                    if let instantReadTemperature = probe.instantReadTemperature {
+                        makeRow(key: "Instant Read", data: String(format: "%.02f", instantReadTemperature))
+                    }
+                    else {
+                        makeRow(key: "Instant Read", data: "--")
+                    }
+                    
+                    if let temps = probe.currentTemperatures {
+                        Divider()
+                            .padding(.top, 8)
+                            .padding(.bottom, 12)
+                        
+                        let tempStrings = temps.values.map { String(format: "%.02f", $0) }
+                        ForEach(tempStrings.indices) {i in
+                            makeRow(key: "T\(i + 1)", data: "\(tempStrings[i])")
+                        }
                     }
                 }
-                
             }
             
         }.padding(.vertical, 8)
