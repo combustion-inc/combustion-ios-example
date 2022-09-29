@@ -191,7 +191,7 @@ struct EngineeringProbeDetails: View {
             }.listStyle(InsetGroupedListStyle())
         }
         .toolbar {
-            ToolbarItem(placement: .bottomBar) {
+            ToolbarItem(placement: .automatic) {
                 Button(action: {
                     if probe.connectionState == .connected {
                         probe.disconnect()
