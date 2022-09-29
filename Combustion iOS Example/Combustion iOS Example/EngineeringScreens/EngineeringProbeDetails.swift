@@ -64,7 +64,26 @@ struct EngineeringProbeDetails: View {
                     }
                 }
                 else {
-                    Section(header: Text("Probe")) {
+                    Section(header: Text("Connection")) {
+                        
+                        HStack() {
+                            Spacer()
+                            Button(action: {
+                                if probe.connectionState == .connected {
+                                    probe.disconnect()
+                                }
+                                else {
+                                    probe.connect()
+                                }
+                            }, label: {
+                                let state = probe.connectionState == .connected ? "Disconnect" : "Connect"
+                                Text(state)
+                            })
+                            .disabled(probe.isDFURunning() ||
+                                      !probe.isConnectable && probe.connectionState != .connected)
+                            Spacer()
+                        }
+ 
                         if (probe.connectionState == .connected) {
                             makeRow(key: "Connection", data: "\(probe.connectionState)", image: Image(systemName: "circle.fill"), color: Color.green)
                         } else if (probe.connectionState == .connecting) {
@@ -74,8 +93,9 @@ struct EngineeringProbeDetails: View {
                         } else if (probe.connectionState == .failed) {
                             makeRow(key: "Connection", data: "\(probe.connectionState)", image: Image(systemName: "exclamationmark.circle.fill"), color: Color.red)
                         }
-
                         makeRow(key: "Connectable", data: "\(probe.isConnectable)")
+                    }
+                    Section(header: Text("Probe")) {
                         makeRow(key: "Serial", data: probe.name)
                         makeRow(key: "MAC", data: "\(probe.macAddressString)")
                         makeRow(key: "ID", data: "\(probe.id)")
@@ -191,21 +211,6 @@ struct EngineeringProbeDetails: View {
             }.listStyle(InsetGroupedListStyle())
         }
         .toolbar {
-            ToolbarItem(placement: .bottomBar) {
-                Button(action: {
-                    if probe.connectionState == .connected {
-                        probe.disconnect()
-                    }
-                    else {
-                        probe.connect()
-                    }
-                }, label: {
-                    let state = probe.connectionState == .connected ? "Disconnect" : "Connect"
-                    Text(state)
-                })
-                .disabled(probe.isDFURunning() ||
-                          !probe.isConnectable && probe.connectionState != .connected)
-            }
             ToolbarItem(placement: .navigation) {
                 Button(action: shareRecords, label: {
                     Image(systemName: "square.and.arrow.up")
@@ -264,5 +269,11 @@ struct EngineeringProbeDetails: View {
         let cap = "\(text.remove(at: text.startIndex))"
         text = "\(cap.capitalized)\(text)"
         return text
+    }
+}
+
+struct EngineeringProbeDetails_Previews: PreviewProvider {
+    static var previews: some View {
+        EngineeringProbeDetails(probe: Probe(AdvertisingData(fakeSerial: UInt32.random(in: 1..<4294967295)), isConnectable: true, RSSI: -50, identifier: UUID()))
     }
 }
