@@ -16,6 +16,7 @@
 		539BF8482763D0E0005E2EFF /* CombustionBLE in Frameworks */ = {isa = PBXBuildFile; productRef = 539BF8472763D0E0005E2EFF /* CombustionBLE */; };
 		F51C9749286D1B67006CDCB4 /* FirmwareUpgradeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51C9748286D1B67006CDCB4 /* FirmwareUpgradeScreen.swift */; };
 		F538695E28EBA9DD00AFBEDB /* SetPredictionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F538695D28EBA9DD00AFBEDB /* SetPredictionScreen.swift */; };
+		F5409CB028EE3C2300469E6A /* Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5409CAF28EE3C2300469E6A /* Row.swift */; };
 		F5AE5AC42837F99D001D33A6 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5AE5AC32837F99D001D33A6 /* ShareSheet.swift */; };
 		F5CC25E8286FBFA5003C80B2 /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5CC25E7286FBFA5003C80B2 /* DocumentPicker.swift */; };
 /* End PBXBuildFile section */
@@ -31,6 +32,7 @@
 		539BF8432762B226005E2EFF /* Combustion-iOS-Example-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Combustion-iOS-Example-Info.plist"; sourceTree = SOURCE_ROOT; };
 		F51C9748286D1B67006CDCB4 /* FirmwareUpgradeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirmwareUpgradeScreen.swift; sourceTree = "<group>"; };
 		F538695D28EBA9DD00AFBEDB /* SetPredictionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetPredictionScreen.swift; sourceTree = "<group>"; };
+		F5409CAF28EE3C2300469E6A /* Row.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Row.swift; sourceTree = "<group>"; };
 		F5AE5AC32837F99D001D33A6 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		F5CC25E7286FBFA5003C80B2 /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -93,6 +95,7 @@
 				F5AE5AC32837F99D001D33A6 /* ShareSheet.swift */,
 				F5CC25E7286FBFA5003C80B2 /* DocumentPicker.swift */,
 				F538695D28EBA9DD00AFBEDB /* SetPredictionScreen.swift */,
+				F5409CAF28EE3C2300469E6A /* Row.swift */,
 			);
 			path = EngineeringScreens;
 			sourceTree = "<group>";
@@ -175,6 +178,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				539BF83A276282D5005E2EFF /* EngineeringProbeRow.swift in Sources */,
+				F5409CB028EE3C2300469E6A /* Row.swift in Sources */,
 				F538695E28EBA9DD00AFBEDB /* SetPredictionScreen.swift in Sources */,
 				F5AE5AC42837F99D001D33A6 /* ShareSheet.swift in Sources */,
 				539BF839276282D5005E2EFF /* EngineeringProbeList.swift in Sources */,

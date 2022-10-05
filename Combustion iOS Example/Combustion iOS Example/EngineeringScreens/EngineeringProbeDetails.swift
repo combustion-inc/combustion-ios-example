@@ -30,6 +30,8 @@ import CombustionBLE
 struct EngineeringProbeDetails: View {
     @ObservedObject var probe: Probe
     
+    @AppStorage("displayCelsius") private var displayCelsius = true
+    
     @State private var showingSetPrediction = false
     @State private var showingFirmwareUpgrade = false
     @State private var showingIDSelection = false
@@ -38,6 +40,10 @@ struct EngineeringProbeDetails: View {
     @State private var showingSetIDFailAlert = false
     @State private var showingShareSheet = false
     @State private var showingShareFailAlert = false
+    
+    @State private var predictionExpanded = true
+    @State private var instantReadExpanded = true
+    @State private var temperatureExpanded = true
     
     @State private var csvUrl: URL?
     
@@ -56,13 +62,15 @@ struct EngineeringProbeDetails: View {
                     dfuView()
                 }
                 else {
-                    probeSection()
-                    recordsSection()
-                    sessionsSection()
+                    predictionSection()
+                    instantReadSection()
+                    temperatureSection()
                     sensorsSection()
-                    actionsSection()
+                    recordsSection()
+                    detailsSection()
                 }
-            }.listStyle(InsetGroupedListStyle())
+            }
+            .listStyle(InsetGroupedListStyle())
         }
         .toolbar {
             ToolbarItem(placement: .automatic) {
@@ -105,76 +113,196 @@ struct EngineeringProbeDetails: View {
     
     @ViewBuilder
     func dfuView() -> some View {
-        makeRow(key: "State", data: probe.dfuState?.description ?? "--")
+        Row(key: "State", value: probe.dfuState?.description ?? "--")
             
         if let uploadProgress = probe.dfuUploadProgress, probe.dfuState == .uploading {
-            makeRow(key: "Upload step", data: "\(uploadProgress.part) of \(uploadProgress.totalParts)")
-            makeRow(key: "Percent complete", data: "\(uploadProgress.progress)")
+            Row(key: "Upload step", value: "\(uploadProgress.part) of \(uploadProgress.totalParts)")
+            Row(key: "Percent complete", value: "\(uploadProgress.progress)")
         }
         
         if(probe.dfuState == .aborted) {
-            makeRow(key: "Error", data: probe.dfuError?.message ?? "--")
+            Row(key: "Error", value: probe.dfuError?.message ?? "--")
         }
     }
     
     @ViewBuilder
-    func probeSection() -> some View {
-        Section(header: Text("Probe")) {
-            if (probe.connectionState == .connected) {
-                makeRow(key: "Connection", data: "\(probe.connectionState)", image: Image(systemName: "circle.fill"), color: Color.green)
-            } else if (probe.connectionState == .connecting) {
-                makeRow(key: "Connection", data: "\(probe.connectionState)", image: Image(systemName: "circle.fill"), color: Color.yellow)
-            } else if (probe.connectionState == .disconnected) {
-                makeRow(key: "Connection", data: "\(probe.connectionState)", image: Image(systemName: "circle"), color: Color.gray)
-            } else if (probe.connectionState == .failed) {
-                makeRow(key: "Connection", data: "\(probe.connectionState)", image: Image(systemName: "exclamationmark.circle.fill"), color: Color.red)
+    func predictionSection() -> some View {
+        Section() {
+            DisclosureGroup("Prediction", isExpanded: $predictionExpanded) {
+                VStack {
+                    if let predictionStatus = probe.predictionStatus {
+                        HStack {
+                            Spacer()
+                            Text(timeString(seconds: Double(predictionStatus.predictionValueSeconds)))
+                                .font(.system(size: 32))
+                            Spacer()
+                        }
+                        
+                        Row(key: "Cooking State", value: "\(predictionStatus.predictionState)")
+                        Row(key: "Cooking to", value: temperatureString(valueCelsius: predictionStatus.predictionSetPointTemperature))
+                        let progressPrecent = Int((predictionStatus.estimatedCoreTemperature - predictionStatus.heatStartTemperature) / (predictionStatus.predictionSetPointTemperature - predictionStatus.heatStartTemperature) * 100.0)
+                        Row(key: "Cook Progress", value: "\(progressPrecent) %")
+                        
+                        HStack() {
+                            Spacer()
+                            Button("Enter Removal Temperature") {
+                                showingSetPrediction = true
+                            }
+                            .disabled(probe.connectionState != .connected)
+                            Spacer()
+                        }
+                    } else {
+                        HStack {
+                            Spacer()
+                            VStack {
+                                ProgressView()
+                                Text("Please connect...")
+                            }
+                            Spacer()
+                        }
+                    }
+                }
             }
+        }
+    }
+    
+    @ViewBuilder
+    func instantReadSection() -> some View {
+        Section() {
+            DisclosureGroup("Instant Read", isExpanded: $instantReadExpanded) {
+                HStack {
+                    Spacer()
+                    
+                    Text(temperatureString(valueCelsius: probe.instantReadTemperature ))
+                        .font(.system(size: 32))
+                    
+                    Spacer()
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    func temperatureSection() -> some View {
+        Section() {
+            DisclosureGroup("Temperatures", isExpanded: $temperatureExpanded) {
+                HStack {
+                    VStack {
+                        Text("Core")
+                        Text(temperatureString(valueCelsius: probe.coreTemperature))
+                    }
+                    
+                    Spacer()
+                    
+                    VStack {
+                        Text("Surface")
+                        Text(temperatureString(valueCelsius: probe.surfaceTemperature))
+                    }
+                    
+                    Spacer()
+                    
+                    VStack {
+                        Text("Ambient")
+                        Text(temperatureString(valueCelsius: probe.ambientTemperature))
+                    }
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    func detailsSection() -> some View {
+        Section() {
+            DisclosureGroup("Details") {
+                VStack {
+                    Group {
+                        Row(key: "Connection", value: "\(probe.connectionState)")
+                        Row(key: "Connectable", value: "\(probe.isConnectable)")
+                        Row(key: "Battery status", value: "\(probe.batteryStatus)")
+                        Row(key: "Signal strength", value: "\(probe.rssi)")
+                        Divider()
+                    }
+                    
+                    Group {
+                        if let sensors = probe.virtualSensors {
+                            Row(key: "Core Sensor", value: "\(sensors.virtualCore)")
+                            Row(key: "Surface Sensor", value: "\(sensors.virtualSurface)")
+                            Row(key: "Ambient Sensor", value: "\(sensors.virtualAmbient)")
+                        } else {
+                            Row(key: "Core Sensor", value: "--")
+                            Row(key: "Surface Sensor", value: "--")
+                            Row(key: "Ambient Sensor", value: "--")
+                        }
+                        
+                        Divider()
+                    }
+                    
+                    Group {
+                        Row(key: "ID", value: "\(probe.id)")
+                        Row(key: "Color", value: "\(probe.color)")
+                        
+                        Divider()
+                    }
+                    
+                    Group {
+                        if let predictionStatus = probe.predictionStatus {
+                            Row(key: "Prediction Mode", value: "\(predictionStatus.predictionMode)")
+                            Row(key: "Prediction Type", value: "\(predictionStatus.predictionType)")
+                            Row(key: "Heat start", value: temperatureString(valueCelsius: predictionStatus.heatStartTemperature))
+                            Row(key: "Estimated Core", value: temperatureString(valueCelsius: predictionStatus.estimatedCoreTemperature))
+                        } else {
+                            Row(key: "Prediction Mode", value: "--")
+                            Row(key: "Prediction Type", value: "--")
+                            Row(key: "Heat start", value: "--")
+                            Row(key: "Estimated Core", value: "--")
+                        }
 
-            makeRow(key: "Connectable", data: "\(probe.isConnectable)")
-            makeRow(key: "Serial", data: probe.name)
-            makeRow(key: "MAC", data: "\(probe.macAddressString)")
-            makeRow(key: "ID", data: "\(probe.id)")
-            makeRow(key: "Color", data: "\(probe.color)")
-            makeRow(key: "RSSI", data: "\(probe.rssi)")
-            makeRow(key: "Battery", data: "\(probe.batteryStatus)")
-            makeRow(key: "Firmware", data: "\(probe.firmareVersion ?? "—")")
-            makeRow(key: "Hardware rev", data: "\(probe.hardwareRevision ?? "—")")
+                        Divider()
+                    }
+
+                    Group {
+                        Row(key: "Firmware", value: "\(probe.firmareVersion ?? "—")")
+                        Row(key: "Hardware rev", value: "\(probe.hardwareRevision ?? "—")")
+                        Row(key: "MAC", value: "\(probe.macAddressString)")
+                        
+                        Divider()
+                    }
+                    
+                    actionsGroup()
+                }
+            }
         }
     }
     
     @ViewBuilder
     func recordsSection() -> some View {
-        Section(header: Text("Records")) {
-            if probe.connectionState == .connected,
-                let min = probe.minSequenceNumber, let max = probe.maxSequenceNumber {
-                makeRow(key: "Range on probe", data: "\(min) : \(max)")
-            }
-            else {
-                makeRow(key: "Range on probe", data: "-- : --")
-            }
-            
-            if probe.connectionState == .disconnected {
-                makeRow(key: "Records downloaded", data: "-")
-            }
-            else if probe.logsUpToDate {
-                makeRow(key: "Downloading records", data: "Complete")
-            }
-            else {
-                makeRow(key: "Downloading records", data: "In progress")
-            }
-        }
-    }
-    
-    @ViewBuilder
-    func sessionsSection() -> some View {
-        Section(header: Text("Sessions")) {
-            ForEach(probe.temperatureLogs) { log in
-                
-                if let startTime = log.startTime {
-                    makeRow(key: "ID: \(log.id) (\(sessionDateFormatter.string(from: startTime)))", data: "\(log.dataPoints.count)")
+        Section() {
+            DisclosureGroup("Records") {
+                if probe.connectionState == .connected,
+                   let min = probe.minSequenceNumber, let max = probe.maxSequenceNumber {
+                    Row(key: "Range on probe", value: "\(min) : \(max)")
                 }
                 else {
-                    makeRow(key: "ID: \(log.id) (--:--:--)", data: "\(log.dataPoints.count)")
+                    Row(key: "Range on probe", value: "-- : --")
+                }
+                
+                if probe.connectionState == .disconnected {
+                    Row(key: "Records downloaded", value: "-")
+                }
+                else if probe.logsUpToDate {
+                    Row(key: "Downloading records", value: "Complete")
+                }
+                else {
+                    Row(key: "Downloading records", value: "In progress")
+                }
+                
+                ForEach(probe.temperatureLogs) { log in
+                    if let startTime = log.startTime {
+                        Row(key: "Session (\(sessionDateFormatter.string(from: startTime)))", value: "\(log.dataPoints.count)")
+                    }
+                    else {
+                        Row(key: "Session (--:--:--)", value: "\(log.dataPoints.count)")
+                    }
                 }
             }
         }
@@ -182,45 +310,71 @@ struct EngineeringProbeDetails: View {
     
     @ViewBuilder
     func sensorsSection() -> some View {
-        Section(header: Text("Sensors")) {
-            if let instantReadTemperature = probe.instantReadTemperature {
-                makeRow(key: "Instant Read", data: String(format: "%.02f", instantReadTemperature))
-            }
-            else {
-                makeRow(key: "Instant Read", data: "--")
-            }
-        
-            if let temps = probe.currentTemperatures {
-                let tempStrings = temps.values.map { String(format: "%.02f", $0) }
-
-                ForEach(Array(tempStrings.enumerated()), id: \.offset) { index, element in
-                    makeRow(key: "T\(index + 1)", data: element)
+        Section() {
+            DisclosureGroup("Sensors") {
+                HStack {
+                    VStack {
+                        Text("T1")
+                        Text(temperatureString(valueCelsius: probe.currentTemperatures?.values[0]))
+                    }
+                    
+                    Spacer()
+                    
+                    VStack {
+                        Text("T2")
+                        Text(temperatureString(valueCelsius: probe.currentTemperatures?.values[1]))
+                    }
+                    
+                    Spacer()
+                    
+                    VStack {
+                        Text("T3")
+                        Text(temperatureString(valueCelsius: probe.currentTemperatures?.values[2]))
+                    }
+                    
+                    Spacer()
+                    
+                    VStack {
+                        Text("T4")
+                        Text(temperatureString(valueCelsius: probe.currentTemperatures?.values[3]))
+                    }
+                }
+                
+                
+                HStack {
+                    VStack {
+                        Text("T5")
+                        Text(temperatureString(valueCelsius: probe.currentTemperatures?.values[4]))
+                    }
+                    
+                    Spacer()
+                    
+                    VStack {
+                        Text("T6")
+                        Text(temperatureString(valueCelsius: probe.currentTemperatures?.values[5]))
+                    }
+                    
+                    Spacer()
+                    
+                    VStack {
+                        Text("T7")
+                        Text(temperatureString(valueCelsius: probe.currentTemperatures?.values[6]))
+                    }
+                    
+                    Spacer()
+                    
+                    VStack {
+                        Text("T8")
+                        Text(temperatureString(valueCelsius: probe.currentTemperatures?.values[7]))
+                    }
                 }
             }
         }
     }
     
     @ViewBuilder
-    func actionsSection() -> some View {
-        Section(header: Text("Actions")) {
-            HStack() {
-                Spacer()
-                Button("Set Prediction") {
-                    showingSetPrediction = true
-                }
-                .disabled(probe.connectionState != .connected)
-                Spacer()
-            }
-            
-            HStack() {
-                Spacer()
-                Button("Firmware Upgrade") {
-                    showingFirmwareUpgrade = true
-                }
-                .disabled(probe.connectionState != .connected)
-                Spacer()
-            }
-            
+    func actionsGroup() -> some View {
+        Group {
             HStack() {
                 Spacer()
                 Button("Set ID") {
@@ -266,9 +420,32 @@ struct EngineeringProbeDetails: View {
                 .disabled(probe.connectionState != .connected)
                 Spacer()
             }
+            
+            HStack() {
+                Spacer()
+                Button("Firmware Upgrade") {
+                    showingFirmwareUpgrade = true
+                }
+                .disabled(probe.connectionState != .connected)
+                Spacer()
+            }
         }
     }
     
+    private func temperatureString(valueCelsius: Double?) -> String {
+        guard let valueCelsius = valueCelsius else { return  "--" }
+        
+        let coreValue = displayCelsius ? valueCelsius : fahrenheit(celsius: valueCelsius)
+        return String(format: "%.01f", coreValue)
+    }
+    
+    private func timeString(seconds: Double) -> String {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute, .second]
+        formatter.unitsStyle = .positional
+        
+        return formatter.string(from: seconds) ?? ""
+    }
     
     private func shareRecords() {
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
@@ -280,34 +457,6 @@ struct EngineeringProbeDetails: View {
         else {
             showingShareFailAlert = true
         }
-    }
-
-    func makeRow(key:String, data:String) -> some View {
-        let row = HStack() {
-            Text(key)
-            Spacer()
-            Text(data)
-                .font(.system(.body, design: .monospaced))
-        }
-        return row
-    }
-
-    func makeRow(key:String, data:String, image:Image, color:Color) -> some View {
-        let row = HStack() {
-            Text(key)
-            Spacer()
-            Text(capFirstLetter(string:data))
-                .font(.system(.body, design: .monospaced))
-            image.foregroundColor(color)
-        }
-        return row
-    }
-    
-    func capFirstLetter(string:String) -> String {
-        var text = string
-        let cap = "\(text.remove(at: text.startIndex))"
-        text = "\(cap.capitalized)\(text)"
-        return text
     }
 }
 
