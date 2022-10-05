@@ -90,6 +90,18 @@ struct SetPredictionScreen: View {
                     .padding(.top, 8)
             }
             
+            Button(action: {
+                // Change input string
+                let value: Int = Int(input) ?? 0
+                let updatedTemperatureValue = displayCelsius ? fahrenheit(celsius: Double(value)) : celsius(fahrenheit: Double(value))
+                input = String(Int(updatedTemperatureValue))
+                
+                displayCelsius.toggle()
+            }, label: {
+                Text(displayCelsius ? "Switch to °Fahrenheit" : "Switch to °Celsius")
+            })
+            .disabled(disableInputs)
+            
             Spacer()
             
             Button(action: {
