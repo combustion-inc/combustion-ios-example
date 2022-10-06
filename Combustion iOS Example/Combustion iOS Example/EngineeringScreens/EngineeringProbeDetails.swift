@@ -68,6 +68,7 @@ struct EngineeringProbeDetails: View {
                     sensorsSection()
                     recordsSection()
                     detailsSection()
+                    actionsGroup()
                 }
             }
             .listStyle(InsetGroupedListStyle())
@@ -113,15 +114,15 @@ struct EngineeringProbeDetails: View {
     
     @ViewBuilder
     func dfuView() -> some View {
-        Row(key: "State", value: probe.dfuState?.description ?? "--")
+        Row(title: "State", value: probe.dfuState?.description ?? "--")
             
         if let uploadProgress = probe.dfuUploadProgress, probe.dfuState == .uploading {
-            Row(key: "Upload step", value: "\(uploadProgress.part) of \(uploadProgress.totalParts)")
-            Row(key: "Percent complete", value: "\(uploadProgress.progress)")
+            Row(title: "Upload step", value: "\(uploadProgress.part) of \(uploadProgress.totalParts)")
+            Row(title: "Percent complete", value: "\(uploadProgress.progress)")
         }
         
         if(probe.dfuState == .aborted) {
-            Row(key: "Error", value: probe.dfuError?.message ?? "--")
+            Row(title: "Error", value: probe.dfuError?.message ?? "--")
         }
     }
     
@@ -138,11 +139,12 @@ struct EngineeringProbeDetails: View {
                             Spacer()
                         }
                         
-                        Row(key: "Cooking State", value: "\(predictionStatus.predictionState)")
-                        Row(key: "Cooking to", value: temperatureString(valueCelsius: predictionStatus.predictionSetPointTemperature))
+                        Row(title: "Cooking State", value: "\(predictionStatus.predictionState)")
+                        Row(title: "Cooking to", value: temperatureString(valueCelsius: predictionStatus.predictionSetPointTemperature))
                         let progressPrecent = Int((predictionStatus.estimatedCoreTemperature - predictionStatus.heatStartTemperature) / (predictionStatus.predictionSetPointTemperature - predictionStatus.heatStartTemperature) * 100.0)
-                        Row(key: "Cook Progress", value: "\(progressPrecent) %")
+                        Row(title: "Cook Progress", value: "\(progressPrecent) %")
                         
+                        Divider()
                         HStack() {
                             Spacer()
                             Button("Enter Removal Temperature") {
@@ -216,59 +218,55 @@ struct EngineeringProbeDetails: View {
             DisclosureGroup("Details") {
                 VStack {
                     Group {
-                        Row(key: "Connection", value: "\(probe.connectionState)")
-                        Row(key: "Connectable", value: "\(probe.isConnectable)")
-                        Row(key: "Battery status", value: "\(probe.batteryStatus)")
-                        Row(key: "Signal strength", value: "\(probe.rssi)")
+                        Row(title: "Connection", value: "\(probe.connectionState)")
+                        Row(title: "Connectable", value: "\(probe.isConnectable)")
+                        Row(title: "Battery status", value: "\(probe.batteryStatus)")
+                        Row(title: "Signal strength", value: "\(probe.rssi)")
                         Divider()
                     }
                     
                     Group {
                         if let sensors = probe.virtualSensors {
-                            Row(key: "Core Sensor", value: "\(sensors.virtualCore)")
-                            Row(key: "Surface Sensor", value: "\(sensors.virtualSurface)")
-                            Row(key: "Ambient Sensor", value: "\(sensors.virtualAmbient)")
+                            Row(title: "Core Sensor", value: "\(sensors.virtualCore)")
+                            Row(title: "Surface Sensor", value: "\(sensors.virtualSurface)")
+                            Row(title: "Ambient Sensor", value: "\(sensors.virtualAmbient)")
                         } else {
-                            Row(key: "Core Sensor", value: "--")
-                            Row(key: "Surface Sensor", value: "--")
-                            Row(key: "Ambient Sensor", value: "--")
+                            Row(title: "Core Sensor", value: "--")
+                            Row(title: "Surface Sensor", value: "--")
+                            Row(title: "Ambient Sensor", value: "--")
                         }
                         
                         Divider()
                     }
                     
                     Group {
-                        Row(key: "ID", value: "\(probe.id)")
-                        Row(key: "Color", value: "\(probe.color)")
+                        Row(title: "ID", value: "\(probe.id)")
+                        Row(title: "Color", value: "\(probe.color)")
                         
                         Divider()
                     }
                     
                     Group {
                         if let predictionStatus = probe.predictionStatus {
-                            Row(key: "Prediction Mode", value: "\(predictionStatus.predictionMode)")
-                            Row(key: "Prediction Type", value: "\(predictionStatus.predictionType)")
-                            Row(key: "Heat start", value: temperatureString(valueCelsius: predictionStatus.heatStartTemperature))
-                            Row(key: "Estimated Core", value: temperatureString(valueCelsius: predictionStatus.estimatedCoreTemperature))
+                            Row(title: "Prediction Mode", value: "\(predictionStatus.predictionMode)")
+                            Row(title: "Prediction Type", value: "\(predictionStatus.predictionType)")
+                            Row(title: "Heat start", value: temperatureString(valueCelsius: predictionStatus.heatStartTemperature))
+                            Row(title: "Estimated Core", value: temperatureString(valueCelsius: predictionStatus.estimatedCoreTemperature))
                         } else {
-                            Row(key: "Prediction Mode", value: "--")
-                            Row(key: "Prediction Type", value: "--")
-                            Row(key: "Heat start", value: "--")
-                            Row(key: "Estimated Core", value: "--")
+                            Row(title: "Prediction Mode", value: "--")
+                            Row(title: "Prediction Type", value: "--")
+                            Row(title: "Heat start", value: "--")
+                            Row(title: "Estimated Core", value: "--")
                         }
 
                         Divider()
                     }
 
                     Group {
-                        Row(key: "Firmware", value: "\(probe.firmareVersion ?? "—")")
-                        Row(key: "Hardware rev", value: "\(probe.hardwareRevision ?? "—")")
-                        Row(key: "MAC", value: "\(probe.macAddressString)")
-                        
-                        Divider()
+                        Row(title: "Firmware", value: "\(probe.firmareVersion ?? "—")")
+                        Row(title: "Hardware rev", value: "\(probe.hardwareRevision ?? "—")")
+                        Row(title: "MAC", value: "\(probe.macAddressString)")
                     }
-                    
-                    actionsGroup()
                 }
             }
         }
@@ -280,28 +278,28 @@ struct EngineeringProbeDetails: View {
             DisclosureGroup("Records") {
                 if probe.connectionState == .connected,
                    let min = probe.minSequenceNumber, let max = probe.maxSequenceNumber {
-                    Row(key: "Range on probe", value: "\(min) : \(max)")
+                    Row(title: "Range on probe", value: "\(min) : \(max)")
                 }
                 else {
-                    Row(key: "Range on probe", value: "-- : --")
+                    Row(title: "Range on probe", value: "-- : --")
                 }
                 
                 if probe.connectionState == .disconnected {
-                    Row(key: "Records downloaded", value: "-")
+                    Row(title: "Records downloaded", value: "-")
                 }
                 else if probe.logsUpToDate {
-                    Row(key: "Downloading records", value: "Complete")
+                    Row(title: "Downloading records", value: "Complete")
                 }
                 else {
-                    Row(key: "Downloading records", value: "In progress")
+                    Row(title: "Downloading records", value: "In progress")
                 }
                 
                 ForEach(probe.temperatureLogs) { log in
                     if let startTime = log.startTime {
-                        Row(key: "Session (\(sessionDateFormatter.string(from: startTime)))", value: "\(log.dataPoints.count)")
+                        Row(title: "Session (\(sessionDateFormatter.string(from: startTime)))", value: "\(log.dataPoints.count)")
                     }
                     else {
-                        Row(key: "Session (--:--:--)", value: "\(log.dataPoints.count)")
+                        Row(title: "Session (--:--:--)", value: "\(log.dataPoints.count)")
                     }
                 }
             }
@@ -375,6 +373,18 @@ struct EngineeringProbeDetails: View {
     @ViewBuilder
     func actionsGroup() -> some View {
         Group {
+            HStack() {
+                Spacer()
+                
+                Button(action: {
+                    displayCelsius.toggle()
+                }, label: {
+                    Text(displayCelsius ? "Switch to °Fahrenheit" : "Switch to °Celsius")
+                })
+
+                Spacer()
+            }
+            
             HStack() {
                 Spacer()
                 Button("Set ID") {

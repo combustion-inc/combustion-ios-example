@@ -30,12 +30,12 @@ import SwiftUI
 import CombustionBLE
 
 struct Row: View {
-    let key: String
+    let title: String
     let value: String
     
     var body: some View {
         HStack {
-            Text(key)
+            Text(title)
             Spacer()
             Text(value)
         }
