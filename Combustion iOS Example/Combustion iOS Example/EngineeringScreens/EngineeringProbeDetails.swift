@@ -56,59 +56,62 @@ struct EngineeringProbeDetails: View {
     }
 
     var body: some View {
-        VStack() {
-            List {
-                if(probe.isDFURunning()) {
-                    dfuView()
-                }
-                else {
-                    predictionSection()
-                    instantReadSection()
-                    temperatureSection()
-                    sensorsSection()
-                    recordsSection()
-                    detailsSection()
-                    actionsGroup()
-                }
-            }
-            .listStyle(InsetGroupedListStyle())
-        }
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                Button(action: {
-                    if probe.connectionState == .connected {
-                        probe.disconnect()
+        GeometryReader { geometry in
+            VStack() {
+                List {
+                    if(probe.isDFURunning()) {
+                        dfuView()
                     }
                     else {
-                        probe.connect()
+                        predictionSection()
+                        instantReadSection()
+                        temperatureSection()
+                        chartSection(geometry: geometry)
+                        sensorsSection()
+                        recordsSection()
+                        detailsSection()
+                        actionsGroup()
                     }
-                }, label: {
-                    let state = probe.connectionState == .connected ? "Disconnect" : "Connect"
-                    Text(state)
-                })
-                .disabled(probe.isDFURunning() ||
-                          !probe.isConnectable && probe.connectionState != .connected)
+                }
+                .listStyle(InsetGroupedListStyle())
             }
-            ToolbarItem(placement: .navigation) {
-                Button(action: shareRecords, label: {
-                    Image(systemName: "square.and.arrow.up")
-                })
-                .disabled(!probe.logsUpToDate)
-                .opacity(probe.logsUpToDate ? 1.0 : 0.3)
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    Button(action: {
+                        if probe.connectionState == .connected {
+                            probe.disconnect()
+                        }
+                        else {
+                            probe.connect()
+                        }
+                    }, label: {
+                        let state = probe.connectionState == .connected ? "Disconnect" : "Connect"
+                        Text(state)
+                    })
+                    .disabled(probe.isDFURunning() ||
+                              !probe.isConnectable && probe.connectionState != .connected)
+                }
+                ToolbarItem(placement: .navigation) {
+                    Button(action: shareRecords, label: {
+                        Image(systemName: "square.and.arrow.up")
+                    })
+                    .disabled(!probe.logsUpToDate)
+                    .opacity(probe.logsUpToDate ? 1.0 : 0.3)
+                }
             }
-        }
-        .navigationTitle("\(probe.name)")
-        .sheet(isPresented: $showingShareSheet) {
-            ShareSheet(activityItems: [csvUrl as Any])
-        }
-        .sheet(isPresented: $showingFirmwareUpgrade) {
-            FirmwareUpgradeScreen(probe: probe)
-        }
-        .sheet(isPresented: $showingSetPrediction) {
-            SetPredictionScreen(probe: probe)
-        }
-        .alert("Failed to export CSV", isPresented: $showingShareFailAlert) {
-            Button("OK", role: .cancel) { }
+            .navigationTitle("\(probe.name)")
+            .sheet(isPresented: $showingShareSheet) {
+                ShareSheet(activityItems: [csvUrl as Any])
+            }
+            .sheet(isPresented: $showingFirmwareUpgrade) {
+                FirmwareUpgradeScreen(probe: probe)
+            }
+            .sheet(isPresented: $showingSetPrediction) {
+                SetPredictionScreen(probe: probe)
+            }
+            .alert("Failed to export CSV", isPresented: $showingShareFailAlert) {
+                Button("OK", role: .cancel) { }
+            }
         }
     }
     
@@ -123,6 +126,18 @@ struct EngineeringProbeDetails: View {
         
         if(probe.dfuState == .aborted) {
             Row(title: "Error", value: probe.dfuError?.message ?? "--")
+        }
+    }
+    
+    @ViewBuilder
+    func chartSection(geometry: GeometryProxy) -> some View {
+        Section() {
+            DisclosureGroup("Chart") {
+                // Only update/display the chart if the view is visible.
+                ChartView(dataSets: ChartData.generate(probe: probe, celsius: displayCelsius),
+                          visible: true)
+                .frame(height: geometry.size.width * 0.75)
+            }
         }
     }
     
