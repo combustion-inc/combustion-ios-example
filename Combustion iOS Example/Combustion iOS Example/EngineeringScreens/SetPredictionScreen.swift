@@ -37,7 +37,6 @@ struct SetPredictionScreen: View {
     @State private var input = ""
     @FocusState private var textIsFocused: Bool
     @State private var showingBeginFailAlert = false
-    @State private var disableInputs = false
     
     @Environment(\.presentationMode) private var presentationMode
     
@@ -66,7 +65,6 @@ struct SetPredictionScreen: View {
                     .fixedSize()
                     .font(.system(size: 48))
                     .focused($textIsFocused)
-                    .disabled(disableInputs)
                     .onAppear {
                         // Set inital value
                         input = displayCelsius ? "70" : "160"
@@ -100,19 +98,15 @@ struct SetPredictionScreen: View {
             }, label: {
                 Text(displayCelsius ? "Switch to °Fahrenheit" : "Switch to °Celsius")
             })
-            .disabled(disableInputs)
             
             Spacer()
             
             Button(action: {
-                disableInputs = true
-                
                 let value: Int = Int(input) ?? 0
                 let temperatureCelsius = displayCelsius ? Double(value) : celsius(fahrenheit: Double(value))
-                
+
                 DeviceManager.shared.setRemovalPrediction(probe, removalTemperatureC: temperatureCelsius) { success in
                     if(!success) {
-                        disableInputs = false
                         showingBeginFailAlert = true
                     }
                     else {
@@ -123,7 +117,6 @@ struct SetPredictionScreen: View {
             }, label: {
                 Text("Begin Prediction")
             })
-            .disabled(disableInputs)
             
             Spacer()
             

@@ -63,9 +63,9 @@ struct EngineeringProbeDetails: View {
                         dfuView()
                     }
                     else {
+                        temperatureSection()
                         predictionSection()
                         instantReadSection()
-                        temperatureSection()
                         chartSection(geometry: geometry)
                         sensorsSection()
                         recordsSection()
@@ -144,25 +144,44 @@ struct EngineeringProbeDetails: View {
     @ViewBuilder
     func predictionSection() -> some View {
         Section() {
-            DisclosureGroup("Prediction", isExpanded: $predictionExpanded) {
+            DisclosureGroup("Prediction Engine", isExpanded: $predictionExpanded) {
                 VStack {
                     if let predictionStatus = probe.predictionStatus {
-                        HStack {
-                            Spacer()
-                            Text(timeString(seconds: Double(predictionStatus.predictionValueSeconds)))
-                                .font(.system(size: 32))
-                            Spacer()
+                        if(predictionStatus.predictionMode != .none) {
+                            // If predicting show time remaining
+                            if(predictionStatus.predictionState == .predicting) {
+                                HStack {
+                                    Spacer()
+                                    Text(timeString(seconds: Double(predictionStatus.predictionValueSeconds)))
+                                        .font(.system(size: 32))
+                                    Spacer()
+                                }
+                            }
+                            else if (predictionStatus.predictionState == .cooking) {
+                                HStack {
+                                    Spacer()
+                                    Text("\(precentThroughCook(predictionStatus: predictionStatus))")
+                                        .font(.system(size: 32))
+                                    Spacer()
+                                }
+                            }
                         }
                         
-                        Row(title: "Cooking State", value: "\(predictionStatus.predictionState)")
-                        Row(title: "Cooking to", value: temperatureString(valueCelsius: predictionStatus.predictionSetPointTemperature))
-                        let progressPrecent = Int((predictionStatus.estimatedCoreTemperature - predictionStatus.heatStartTemperature) / (predictionStatus.predictionSetPointTemperature - predictionStatus.heatStartTemperature) * 100.0)
-                        Row(title: "Cook Progress", value: "\(progressPrecent) %")
+                        Row(title: "Prediction State", value: "\(predictionStatus.predictionState)")
+                        
+                        if(predictionStatus.predictionSetPointTemperature > 0) {
+                            Row(title: "Target temperature", value: temperatureString(valueCelsius: predictionStatus.predictionSetPointTemperature, hideDecimal: true))
+                        }
+
+                        if(predictionStatus.predictionMode != .none && predictionStatus.predictionState == .predicting) {
+                            Row(title: "Progress", value: precentThroughCook(predictionStatus: predictionStatus))
+                        }
+
                         
                         Divider()
                         HStack() {
                             Spacer()
-                            Button("Enter Removal Temperature") {
+                            Button(predictionStatus.predictionMode == .none ? "Enter Target Temperature" : "Change Target Temperature") {
                                 showingSetPrediction = true
                             }
                             .disabled(probe.connectionState != .connected)
@@ -457,10 +476,29 @@ struct EngineeringProbeDetails: View {
         }
     }
     
-    private func temperatureString(valueCelsius: Double?) -> String {
+    private func precentThroughCook(predictionStatus: PredictionStatus) -> String {
+        let start = predictionStatus.heatStartTemperature
+        let end = predictionStatus.predictionSetPointTemperature
+        let core = predictionStatus.estimatedCoreTemperature
+        
+        if(core > end) {
+            return "100%"
+        }
+        else {
+            let percent = Int(((core - start) / (end - start)) * 100.0)
+            return "\(percent)%"
+        }
+    }
+    
+    private func temperatureString(valueCelsius: Double?, hideDecimal: Bool = false) -> String {
         guard let valueCelsius = valueCelsius else { return  "--" }
         
         let coreValue = displayCelsius ? valueCelsius : fahrenheit(celsius: valueCelsius)
+        
+        if(hideDecimal) {
+            return String(format: "%.0f", coreValue)
+        }
+        
         return String(format: "%.01f", coreValue)
     }
     
