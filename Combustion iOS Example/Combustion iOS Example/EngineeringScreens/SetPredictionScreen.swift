@@ -67,7 +67,7 @@ struct SetPredictionScreen: View {
                     .focused($textIsFocused)
                     .onAppear {
                         // Set inital value
-                        input = displayCelsius ? "70" : "160"
+                        input = displayCelsius ? "54" : "130"
                         
                         // After a small delay, set focus on textfield
                         let delay = UIDevice.current.userInterfaceIdiom == .pad ? 1.0 : 0.1

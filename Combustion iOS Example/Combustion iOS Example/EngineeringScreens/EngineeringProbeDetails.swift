@@ -421,6 +421,19 @@ struct EngineeringProbeDetails: View {
             
             HStack() {
                 Spacer()
+                
+                Button(action: {
+                    DeviceManager.shared.cancelPrediction(probe) { _ in }
+                }, label: {
+                    Text("Stop Prediction")
+                })
+                .disabled(probe.predictionStatus?.predictionSetPointTemperature ?? -1.0 <= 0.0)
+
+                Spacer()
+            }
+            
+            HStack() {
+                Spacer()
                 Button("Set ID") {
                     showingIDSelection = true
                 }
