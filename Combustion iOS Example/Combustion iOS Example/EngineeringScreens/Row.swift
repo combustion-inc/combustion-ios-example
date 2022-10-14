@@ -1,9 +1,9 @@
-//  ContentView.swift
+//  Row.swift
 
 /*--
 MIT License
 
-Copyright (c) 2021 Combustion Inc.
+Copyright (c) 2022 Combustion Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,38 +24,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 --*/
 
+import Foundation
+import Combine
 import SwiftUI
 import CombustionBLE
 
-struct EngineeringProbeList: View {
-    @ObservedObject var deviceManager = DeviceManager.shared
-    
-    init() {
-        // This code can be used to create Simulated probes
-        // which allow for UI testing without devices
-        
-        //deviceManager.addSimulatedProbe()
-        //deviceManager.addSimulatedProbe()
-        //deviceManager.addSimulatedProbe()
-    }
+struct Row: View {
+    let title: String
+    let value: String
     
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(deviceManager.getProbes(), id: \.self) { probe in
-                    NavigationLink(destination: EngineeringProbeDetails(probe: probe)) {
-                        EngineeringProbeRow(probe: probe)
-                    }
-                }
-            }
-            .navigationTitle("Probes")
+        HStack {
+            Text(title)
+            Spacer()
+            Text(value)
         }
-    }
-}
- 
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        EngineeringProbeList()
     }
 }
