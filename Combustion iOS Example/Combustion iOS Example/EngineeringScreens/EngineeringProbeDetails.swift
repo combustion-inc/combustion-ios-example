@@ -120,8 +120,8 @@ struct EngineeringProbeDetails: View {
         Row(title: "State", value: probe.dfuState?.description ?? "--")
             
         if let uploadProgress = probe.dfuUploadProgress, probe.dfuState == .uploading {
-            Row(title: "Upload step", value: "\(uploadProgress.part) of \(uploadProgress.totalParts)")
-            Row(title: "Percent complete", value: "\(uploadProgress.progress)")
+            Row(title: "Upload Step", value: "\(uploadProgress.part) of \(uploadProgress.totalParts)")
+            Row(title: "Percent Complete", value: "\(uploadProgress.progress)")
         }
         
         if(probe.dfuState == .aborted) {
@@ -167,10 +167,10 @@ struct EngineeringProbeDetails: View {
                             }
                         }
                         
-                        Row(title: "Prediction State", value: "\(predictionStatus.predictionState)")
+                        Row(title: "Prediction State", value: predictionStateString(state: predictionStatus.predictionState))
                         
                         if(predictionStatus.predictionSetPointTemperature > 0) {
-                            Row(title: "Target temperature", value: temperatureString(valueCelsius: predictionStatus.predictionSetPointTemperature, hideDecimal: true))
+                            Row(title: "Target Temperature", value: temperatureString(valueCelsius: predictionStatus.predictionSetPointTemperature, hideDecimal: true))
                         }
 
                         if(predictionStatus.predictionMode != .none && predictionStatus.predictionState == .predicting) {
@@ -254,8 +254,8 @@ struct EngineeringProbeDetails: View {
                     Group {
                         Row(title: "Connection", value: "\(probe.connectionState)")
                         Row(title: "Connectable", value: "\(probe.isConnectable)")
-                        Row(title: "Battery status", value: "\(probe.batteryStatus)")
-                        Row(title: "Signal strength", value: "\(probe.rssi)")
+                        Row(title: "Battery Status", value: "\(probe.batteryStatus)")
+                        Row(title: "Signal Strength", value: "\(probe.rssi)")
                         Divider()
                     }
                     
@@ -284,12 +284,12 @@ struct EngineeringProbeDetails: View {
                         if let predictionStatus = probe.predictionStatus {
                             Row(title: "Prediction Mode", value: "\(predictionStatus.predictionMode)")
                             Row(title: "Prediction Type", value: "\(predictionStatus.predictionType)")
-                            Row(title: "Heat start", value: temperatureString(valueCelsius: predictionStatus.heatStartTemperature))
+                            Row(title: "Heat Start", value: temperatureString(valueCelsius: predictionStatus.heatStartTemperature))
                             Row(title: "Estimated Core", value: temperatureString(valueCelsius: predictionStatus.estimatedCoreTemperature))
                         } else {
                             Row(title: "Prediction Mode", value: "--")
                             Row(title: "Prediction Type", value: "--")
-                            Row(title: "Heat start", value: "--")
+                            Row(title: "Heat Start", value: "--")
                             Row(title: "Estimated Core", value: "--")
                         }
 
@@ -298,7 +298,7 @@ struct EngineeringProbeDetails: View {
 
                     Group {
                         Row(title: "Firmware", value: "\(probe.firmareVersion ?? "—")")
-                        Row(title: "Hardware rev", value: "\(probe.hardwareRevision ?? "—")")
+                        Row(title: "Hardware Rev", value: "\(probe.hardwareRevision ?? "—")")
                         Row(title: "MAC", value: "\(probe.macAddressString)")
                     }
                 }
@@ -500,6 +500,23 @@ struct EngineeringProbeDetails: View {
         else {
             let percent = Int(((core - start) / (end - start)) * 100.0)
             return "\(percent)%"
+        }
+    }
+    
+    private func predictionStateString(state: PredictionState) -> String {
+        switch(state) {
+        case .probeInserted:
+            return "Inserted"
+        case .probeNotInserted:
+            return "Not Inserted"
+        case .cooking:
+            return "Cooking"
+        case .predicting:
+            return "Predicting"
+        case .removalPredictionDone:
+            return "Ready to Remove"
+        case .unknown:
+            return "Unknown"
         }
     }
     
