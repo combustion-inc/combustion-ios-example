@@ -31,6 +31,10 @@ struct EngineeringProbeList: View {
     @ObservedObject var deviceManager = DeviceManager.shared
     
     init() {
+        // Initialize bluetooth
+        DeviceManager.shared.initBluetooth()
+        
+        
         // This code can be used to create Simulated probes
         // which allow for UI testing without devices
         
