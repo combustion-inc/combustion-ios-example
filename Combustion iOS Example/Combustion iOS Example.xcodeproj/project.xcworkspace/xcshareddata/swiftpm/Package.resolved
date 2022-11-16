@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/combustion-inc/combustion-ios-ble",
       "state" : {
-        "branch" : "feature/over_temperature_flag",
-        "revision" : "6f3093043f25d4d2825a48e414baeee0fc7ca41d"
+        "branch" : "develop",
+        "revision" : "a3b98e2668a758c56de269d20ebed0198c8efa39"
       }
     },
     {
