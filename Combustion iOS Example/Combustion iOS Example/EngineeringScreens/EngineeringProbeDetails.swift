@@ -41,6 +41,9 @@ struct EngineeringProbeDetails: View {
     @State private var showingShareSheet = false
     @State private var showingShareFailAlert = false
     
+    @State private var showingReadOverTemperatureAlert = false
+    @State private var readOverTemperatureMessage = ""
+    
     @State private var predictionExpanded = true
     @State private var instantReadExpanded = true
     @State private var temperatureExpanded = true
@@ -475,6 +478,31 @@ struct EngineeringProbeDetails: View {
                     Button("OK", role: .cancel) { }
                 }
                 .disabled(probe.connectionState != .connected)
+                Spacer()
+            }
+            
+            HStack() {
+                Spacer()
+                
+                Button(action: {
+                    DeviceManager.shared.readOverTemperatureFlag(probe) { success, overTemperature in
+                        showingReadOverTemperatureAlert = true
+                        
+                        if(!success) {
+                            readOverTemperatureMessage = "Failed to read over temperature flag"
+                        }
+                        else {
+                            readOverTemperatureMessage = overTemperature ? "Over temperature flag is set" : "Over temperature flag is NOT set"
+                        }
+                    }
+                }, label: {
+                    Text("Read Over Temperature")
+                })
+                .alert(readOverTemperatureMessage, isPresented: $showingReadOverTemperatureAlert) {
+                    Button("OK", role: .cancel) { }
+                }
+                .disabled(probe.connectionState != .connected)
+
                 Spacer()
             }
             
