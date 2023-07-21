@@ -98,8 +98,8 @@ struct EngineeringProbeDetails: View {
                     Button(action: shareRecords, label: {
                         Image(systemName: "square.and.arrow.up")
                     })
-                    .disabled(!probe.logsUpToDate)
-                    .opacity(probe.logsUpToDate ? 1.0 : 0.3)
+                    .disabled((probe.percentOfLogsSynced ?? 0) < 100)
+                    .opacity((probe.percentOfLogsSynced ?? 0) < 100 ? 1.0 : 0.3)
                 }
             }
             .navigationTitle("\(probe.name)")
@@ -149,35 +149,41 @@ struct EngineeringProbeDetails: View {
         Section() {
             DisclosureGroup("Prediction Engine", isExpanded: $predictionExpanded) {
                 VStack {
-                    if let predictionStatus = probe.predictionStatus {
+                    if let predictionStatus = probe.predictionInfo {
                         if(predictionStatus.predictionMode != .none) {
                             // If predicting show time remaining
                             if(predictionStatus.predictionState == .predicting) {
                                 HStack {
                                     Spacer()
-                                    Text(timeString(seconds: Double(predictionStatus.predictionValueSeconds)))
-                                        .font(.system(size: 32))
+                                    if let secondsRemaining = predictionStatus.secondsRemaining {
+                                        Text(timeString(seconds: Double(predictionStatus.secondsRemaining ?? 0)))
+                                            .font(.system(size: 32))
+                                    }
+                                    else {
+                                        Text("--")
+                                            .font(.system(size: 32))
+                                    }
                                     Spacer()
                                 }
                             }
                             else if (predictionStatus.predictionState == .cooking) {
                                 HStack {
                                     Spacer()
-                                    Text("\(precentThroughCook(predictionStatus: predictionStatus))")
+                                    Text("\(predictionStatus.percentThroughCook)")
                                         .font(.system(size: 32))
                                     Spacer()
                                 }
                             }
                         }
                         
-                        Row(title: "Prediction State", value: predictionStateString(state: predictionStatus.predictionState))
+                        Row(title: "Prediction State", value: predictionStatus.predictionState.toString())
                         
                         if(predictionStatus.predictionSetPointTemperature > 0) {
                             Row(title: "Target Temperature", value: temperatureString(valueCelsius: predictionStatus.predictionSetPointTemperature, hideDecimal: true))
                         }
 
                         if(predictionStatus.predictionMode != .none && predictionStatus.predictionState == .predicting) {
-                            Row(title: "Progress", value: precentThroughCook(predictionStatus: predictionStatus))
+                            Row(title: "Progress", value: "\(predictionStatus.percentThroughCook)")
                         }
 
                         
@@ -228,21 +234,36 @@ struct EngineeringProbeDetails: View {
                 HStack {
                     VStack {
                         Text("Core")
-                        Text(temperatureString(valueCelsius: probe.coreTemperature))
+                        if let virutalTemps = probe.virtualTemperatures {
+                            Text(temperatureString(valueCelsius: virutalTemps.coreTemperature))
+                        }
+                        else {
+                            Text("--")
+                        }
                     }
                     
                     Spacer()
                     
                     VStack {
                         Text("Surface")
-                        Text(temperatureString(valueCelsius: probe.surfaceTemperature))
+                        if let virutalTemps = probe.virtualTemperatures {
+                            Text(temperatureString(valueCelsius: virutalTemps.surfaceTemperature))
+                        }
+                        else {
+                            Text("--")
+                        }
                     }
                     
                     Spacer()
                     
                     VStack {
                         Text("Ambient")
-                        Text(temperatureString(valueCelsius: probe.ambientTemperature))
+                        if let virutalTemps = probe.virtualTemperatures {
+                            Text(temperatureString(valueCelsius: virutalTemps.ambientTemperature))
+                        }
+                        else {
+                            Text("--")
+                        }
                     }
                 }
             }
@@ -284,10 +305,9 @@ struct EngineeringProbeDetails: View {
                     }
                     
                     Group {
-                        if let predictionStatus = probe.predictionStatus {
+                        if let predictionStatus = probe.predictionInfo {
                             Row(title: "Prediction Mode", value: "\(predictionStatus.predictionMode)")
                             Row(title: "Prediction Type", value: "\(predictionStatus.predictionType)")
-                            Row(title: "Heat Start", value: temperatureString(valueCelsius: predictionStatus.heatStartTemperature))
                             Row(title: "Estimated Core", value: temperatureString(valueCelsius: predictionStatus.estimatedCoreTemperature))
                         } else {
                             Row(title: "Prediction Mode", value: "--")
@@ -324,7 +344,7 @@ struct EngineeringProbeDetails: View {
                 if probe.connectionState == .disconnected {
                     Row(title: "Records downloaded", value: "-")
                 }
-                else if probe.logsUpToDate {
+                else if (probe.percentOfLogsSynced ?? 0) >= 100 {
                     Row(title: "Downloading records", value: "Complete")
                 }
                 else {
@@ -412,7 +432,7 @@ struct EngineeringProbeDetails: View {
         Group {
             HStack() {
                 Spacer()
-                
+
                 Button(action: {
                     displayCelsius.toggle()
                 }, label: {
@@ -430,7 +450,7 @@ struct EngineeringProbeDetails: View {
                 }, label: {
                     Text("Stop Prediction")
                 })
-                .disabled(probe.predictionStatus?.predictionSetPointTemperature ?? -1.0 <= 0.0)
+                .disabled(probe.predictionInfo?.predictionSetPointTemperature ?? -1.0 <= 0.0)
 
                 Spacer()
             }
@@ -514,37 +534,6 @@ struct EngineeringProbeDetails: View {
                 .disabled(probe.connectionState != .connected)
                 Spacer()
             }
-        }
-    }
-    
-    private func precentThroughCook(predictionStatus: PredictionStatus) -> String {
-        let start = predictionStatus.heatStartTemperature
-        let end = predictionStatus.predictionSetPointTemperature
-        let core = predictionStatus.estimatedCoreTemperature
-        
-        if(core > end) {
-            return "100%"
-        }
-        else {
-            let percent = Int(((core - start) / (end - start)) * 100.0)
-            return "\(percent)%"
-        }
-    }
-    
-    private func predictionStateString(state: PredictionState) -> String {
-        switch(state) {
-        case .probeInserted:
-            return "Inserted"
-        case .probeNotInserted:
-            return "Not Inserted"
-        case .cooking:
-            return "Cooking"
-        case .predicting:
-            return "Predicting"
-        case .removalPredictionDone:
-            return "Ready to Remove"
-        case .unknown:
-            return "Unknown"
         }
     }
     

@@ -52,16 +52,32 @@ struct EngineeringProbeRow: View {
                     Text("Instant Read")
                     Text(temperatureString(valueCelsius: probe.instantReadTemperature))
                     Text("Surface")
-                    Text(temperatureString(valueCelsius: probe.surfaceTemperature))
+                    if let virutalTemps = probe.virtualTemperatures {
+                        Text(temperatureString(valueCelsius: virutalTemps.surfaceTemperature))
+                    }
+                    else {
+                        Text("--")
+                    }
+
                 }
                 
                 Spacer()
                 
                 VStack {
                     Text("Core")
-                    Text(temperatureString(valueCelsius: probe.coreTemperature))
+                    if let virutalTemps = probe.virtualTemperatures {
+                        Text(temperatureString(valueCelsius: virutalTemps.coreTemperature))
+                    }
+                    else {
+                        Text("--")
+                    }
                     Text("Ambient")
-                    Text(temperatureString(valueCelsius: probe.ambientTemperature))
+                    if let virutalTemps = probe.virtualTemperatures {
+                        Text(temperatureString(valueCelsius: virutalTemps.ambientTemperature))
+                    }
+                    else {
+                        Text("--")
+                    }
                 }
                 
                 Spacer()
