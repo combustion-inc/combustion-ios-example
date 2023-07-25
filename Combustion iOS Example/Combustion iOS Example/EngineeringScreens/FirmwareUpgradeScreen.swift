@@ -56,7 +56,7 @@ struct FirmwareUpgradeScreen: View {
                     Spacer()
                     Button(action: {
                         if let dfuFileURL = selectedFile {
-                            if(DeviceManager.shared.runSoftwareUpgrade(probe, otaFile: dfuFileURL)) {
+                            if(probe.runSoftwareUpgrade(dfuFile: dfuFileURL)) {
                                 presentationMode.wrappedValue.dismiss()
                             }
                             else {
